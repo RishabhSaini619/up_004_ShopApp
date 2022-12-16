@@ -2,7 +2,7 @@
     package="com.flutter.udemy.practice.shopapp.up_004_shopapp">
    <application
         android:label="ENGAGE"
-        android:name="ENGAGE"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
