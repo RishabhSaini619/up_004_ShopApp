@@ -1,9 +1,13 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:up_004_shopapp/screens/screen_product_detail.dart';
 import 'package:provider/provider.dart';
 import '../model/model_product.dart';
 
 class ProductItemWidget extends StatelessWidget {
+  const ProductItemWidget({Key key}) : super(key: key);
+
   // final String productItemId;
   // final String productItemTitle;
   // final String productItemImageURL;
@@ -33,7 +37,7 @@ class ProductItemWidget extends StatelessWidget {
               product.isProductFavorite?
               Icons.favorite_sharp
               : Icons.favorite_border_sharp,
-              color: Color(0xffff0000),
+              color: const Color(0xffff0000),
             ),
             onPressed: () {
               product.toggleFavoriteStatus();
