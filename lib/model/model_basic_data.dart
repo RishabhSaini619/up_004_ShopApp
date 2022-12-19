@@ -6,7 +6,7 @@ import 'model_product.dart';
     productTitle: 'Shirt',
     productDescription: 'A red shirt. It is pretty red!',
     productPrice: 29.99,
-    productImageURl:
+    productImageURL:
     'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
   ),
   Product(
@@ -14,7 +14,7 @@ import 'model_product.dart';
     productTitle: 'Trousers',
     productDescription: 'A nice pair of trousers.',
     productPrice: 59.99,
-    productImageURl:
+    productImageURL:
     'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
   ),
   Product(
@@ -22,7 +22,7 @@ import 'model_product.dart';
     productTitle: 'Scarf',
     productDescription: 'Warm and cozy Yellow Scarf - exactly what you need for the winter.',
     productPrice: 19.99,
-    productImageURl:
+    productImageURL:
     'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
   ),
   Product(
@@ -30,7 +30,7 @@ import 'model_product.dart';
     productTitle: 'Pan',
     productDescription: 'Prepare any meal you want.',
     productPrice: 49.99,
-    productImageURl:
+    productImageURL:
     'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
   ),
 ];
