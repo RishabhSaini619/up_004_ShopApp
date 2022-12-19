@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:up_004_shopapp/screens/screen_products_overview.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
       title: 'ENGAGE',
       theme: ThemeData(
+        fontFamily: 'Lato',
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: Colors.deepOrange, // as above
           primaryColorDark: Colors.deepOrangeAccent, // as above
@@ -29,21 +30,50 @@ class MyApp extends StatelessWidget {
               .dark, // default (Brightness.light), can be set manually
         ),
         textTheme: const TextTheme(
-          displaySmall: TextStyle(),
-          displayMedium: TextStyle(),
-          displayLarge: TextStyle(),
-          headlineSmall: TextStyle(),
-          headlineMedium: TextStyle(),
-          headlineLarge: TextStyle(),
-          titleSmall: TextStyle(),
-          titleMedium: TextStyle(),
-          titleLarge: TextStyle(),
-          bodySmall: TextStyle(),
-          bodyMedium: TextStyle(),
-          bodyLarge: TextStyle(),
-          labelSmall: TextStyle(),
-          labelMedium: TextStyle(),
-          labelLarge: TextStyle(),
+          displaySmall: TextStyle(
+            fontFamily: 'Lato',
+            fontStyle: FontStyle.italic,
+          ),
+          displayMedium: TextStyle(
+            fontFamily: 'Lato',
+            fontStyle: FontStyle.italic,
+          ),
+          displayLarge: TextStyle(
+            fontFamily: 'Lato',
+            fontStyle: FontStyle.italic,
+          ),
+          headlineSmall: TextStyle(
+            fontFamily: 'Lato',
+            fontStyle: FontStyle.italic,
+          ),
+          headlineMedium: TextStyle(
+            fontFamily: 'Lato',
+            fontStyle: FontStyle.italic,
+          ),
+          headlineLarge: TextStyle(
+            fontFamily: 'Lato',
+            fontStyle: FontStyle.italic,
+          ),
+          titleSmall: TextStyle(
+            fontFamily: 'Lato',
+            fontStyle: FontStyle.italic,
+          ),
+          titleMedium: TextStyle(
+            fontFamily: 'Lato',
+            fontStyle: FontStyle.italic,
+          ),
+          titleLarge: TextStyle(
+            fontFamily: 'Lato',
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.w900,
+          ),
+          bodySmall: TextStyle(fontFamily: 'Lato',
+          ),
+          bodyMedium: TextStyle(fontFamily: 'Lato'),
+          bodyLarge: TextStyle(fontFamily: 'Lato'),
+          labelSmall: TextStyle(fontFamily: 'Lato'),
+          labelMedium: TextStyle(fontFamily: 'Lato'),
+          labelLarge: TextStyle(fontFamily: 'Lato'),
         ),
         appBarTheme: const AppBarTheme(
           centerTitle: true,
@@ -51,32 +81,11 @@ class MyApp extends StatelessWidget {
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(30),
             ),
-          ), systemOverlayStyle: SystemUiOverlayStyle.light,
+          ),
+          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "ENGAGE",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-      ),
-      body: Center(
-        child: Text(
-          'Let\'s build app',
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-      ),
+      home: ProductsOverviewScreen(),
     );
   }
 }
