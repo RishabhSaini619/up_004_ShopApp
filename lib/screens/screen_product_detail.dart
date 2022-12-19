@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/provider_product.dart';
 
+
+
 class ProductDetailScreen extends StatelessWidget {
   static const routeName = '/ProductDetailScreen';
+
+  const ProductDetailScreen({Key key}) : super(key: key);
   // final String productItemTitle;
   //
   // const ProductDetailScreen( this.productItemTitle,
@@ -21,6 +25,7 @@ class ProductDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(loadedProduct.productTitle),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
+
       ),
       // body: Text(),
     );
