@@ -12,4 +12,7 @@ void addProduct() {
   // _items.add(value);
   notifyListeners();
 }
+Product findById(String id) {
+  return _items.firstWhere((product) => product.productId == id);
+}
 }
