@@ -7,6 +7,7 @@ import 'package:up_004_shopapp/providers/provider_product.dart';
 import 'package:up_004_shopapp/screens/screen_product_detail.dart';
 import 'package:up_004_shopapp/screens/screen_products_overview.dart';
 
+import 'model/model_cart.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,8 +19,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (ctx) =>  Products(), // using crate cause builder error
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => Products(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Cart(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'ENGAGE',
