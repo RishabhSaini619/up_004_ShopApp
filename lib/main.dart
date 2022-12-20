@@ -8,6 +8,7 @@ import 'package:up_004_shopapp/screens/screen_product_detail.dart';
 import 'package:up_004_shopapp/screens/screen_products_overview.dart';
 
 import 'model/model_cart.dart';
+import 'screens/screen_cart.dart';
 
 void main() {
   runApp(const MyApp());
@@ -102,10 +103,11 @@ class MyApp extends StatelessWidget {
             systemOverlayStyle: SystemUiOverlayStyle.light,
           ),
         ),
-        home: ProductsOverviewScreen(),
+        home: const ProductsOverviewScreen(),
         routes: {
-          ProductsOverviewScreen.routeName: (ctx) => ProductsOverviewScreen(),
-          ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+          ProductsOverviewScreen.routeName: (ctx) => const ProductsOverviewScreen(),
+          ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
+          CartScreen.routeName: (ctx) => CartScreen(),
         },
       ),
     );
