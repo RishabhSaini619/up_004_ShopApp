@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../model/model_cart.dart';
+import '../widgets/widget_cart_item.dart';
+import '../model/model_cart.dart' show Cart;
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/CartScreen';
@@ -15,6 +16,22 @@ class CartScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: cart.cartItemCount,
+              itemBuilder: (context, index) {
+                return CartItemWidget(
+                  cart.items.values.toList()[index].cartItemId,
+                  cart.items.values.toList()[index].cartItemTitle,
+                  cart.items.values.toList()[index].cartItemPrice,
+                  cart.items.values.toList()[index].cartItemQuantity,
+                );
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
           Card(
             margin: const EdgeInsets.all(15),
             child: Padding(
@@ -35,7 +52,25 @@ class CartScreen extends StatelessWidget {
                     backgroundColor:
                         Theme.of(context).colorScheme.primary.withOpacity(0.5),
                   ),
-                  TextButton(
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          const MaterialStatePropertyAll<Color>(Colors.white),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                ,
+                          ),
+                        ),
+                      ),
+                    ),
                     onPressed: () {},
                     child: Text(
                       'Order',
