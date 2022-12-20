@@ -69,7 +69,6 @@ class CartItemWidget extends StatelessWidget {
                   child: Text(
                     '₹ $cardItemPrice',
                     textAlign: TextAlign.center,
-
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
@@ -97,7 +96,6 @@ class CartItemWidget extends StatelessWidget {
             trailing: Text(
               'Total ₹ ${cardItemPrice * cardItemQuantity}',
               textAlign: TextAlign.center,
-
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
