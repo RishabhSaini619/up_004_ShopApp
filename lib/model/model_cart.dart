@@ -5,17 +5,19 @@ class Cart with ChangeNotifier {
   Map<String, CartItem> get items {
     return {..._items};
   }
+
   int get cartItemCount {
-    return  _items.length;
+    return _items.length;
   }
 
-  double get totalAmount{
+  double get totalAmount {
     var total = 0.0;
     _items.forEach((key, cartItem) {
       total += (cartItem.cartItemPrice * cartItem.cartItemQuantity);
     });
     return total;
   }
+
   void addItem(
     String productId,
     String productTitle,
@@ -35,14 +37,19 @@ class Cart with ChangeNotifier {
           () => CartItem(
                 DateTime.now().toString(),
                 productTitle,
-                4,
+                1,
                 productPrice,
-              ));
+              ),);
     }
   }
-  notifyListeners();
-}
 
+  notifyListeners();
+
+  void removeItem(String productId) {
+    _items.remove(productId);
+    notifyListeners();
+  }
+}
 
 class CartItem {
   final String cartItemId;

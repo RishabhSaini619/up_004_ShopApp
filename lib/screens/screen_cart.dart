@@ -22,6 +22,7 @@ class CartScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return CartItemWidget(
                   cart.items.values.toList()[index].cartItemId,
+                  cart.items.keys.toList()[index],
                   cart.items.values.toList()[index].cartItemTitle,
                   cart.items.values.toList()[index].cartItemPrice,
                   cart.items.values.toList()[index].cartItemQuantity,
@@ -43,7 +44,9 @@ class CartScreen extends StatelessWidget {
                     'Total',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const Spacer(),
+                  const SizedBox(
+                    width: 5,
+                  ),
                   Chip(
                     label: Text(
                       '₹ ${cart.totalAmount}',
@@ -52,9 +55,7 @@ class CartScreen extends StatelessWidget {
                     backgroundColor:
                         Theme.of(context).colorScheme.primary.withOpacity(0.5),
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ),
+                  const Spacer(),
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
