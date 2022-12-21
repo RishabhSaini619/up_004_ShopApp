@@ -55,7 +55,32 @@ class ProductItemWidget extends StatelessWidget {
               color: Colors.deepOrangeAccent,
             ),
             onPressed: () {
-              cart.addItem(product.productId, product.productTitle, product.productPrice);
+              cart.addItem(product.productId, product.productTitle,
+                  product.productPrice);
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(30),
+                  )),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                  content: Text(
+                    'Item added to Cart',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  duration: const Duration(seconds: 1),
+                  action: SnackBarAction(
+                    label: 'UNDO',
+                    textColor: Colors.white,
+                    disabledTextColor: Colors.white54,
+                    onPressed: () {
+                      cart.removeSelectedItem(product.productId);
+                    },
+                  ),
+                ),
+              );
             },
           ),
         ),

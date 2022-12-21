@@ -21,13 +21,10 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
-  var _showFavoritesOnly = true;
+  var _showFavoritesOnly = false;
 
   @override
   Widget build(BuildContext context) {
-    // final productsData = Provider.of<Products>(context, listen:  false);
-    final cartData = Provider.of<Cart>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("ENGAGE"),

@@ -33,13 +33,14 @@ class Cart with ChangeNotifier {
               existingCartItem.cartItemPrice));
     } else {
       _items.putIfAbsent(
-          productId,
-          () => CartItem(
-                DateTime.now().toString(),
-                productTitle,
-                1,
-                productPrice,
-              ),);
+        productId,
+        () => CartItem(
+          DateTime.now().toString(),
+          productTitle,
+          1,
+          productPrice,
+        ),
+      );
     }
   }
 
@@ -49,6 +50,27 @@ class Cart with ChangeNotifier {
     _items.remove(productId);
     notifyListeners();
   }
+
+  void removeSelectedItem(String productId) {
+    if (!items.containsKey(productId)) {
+      return;
+    }
+    if (items[productId].cartItemQuantity > 1) {
+      _items.update(
+        productId,
+        (existingCartItem) => CartItem(
+          existingCartItem.cartItemId,
+          existingCartItem.cartItemTitle,
+          existingCartItem.cartItemQuantity - 1,
+          existingCartItem.cartItemPrice,
+        ),
+      );
+    } else {
+      items.remove(productId);
+    }
+    notifyListeners();
+  }
+
   void clearCartItem() {
     _items = {};
     notifyListeners();
