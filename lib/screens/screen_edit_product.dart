@@ -25,13 +25,26 @@ class _EditProductScreenState extends State<EditProductScreen> {
   );
 
   void updateProduct() {
+    final isEditedValidator = formKey.currentState.validate();
+    if (!isEditedValidator) {
+      return;
+    }
     formKey.currentState.save();
-    print(
-        "productTitle  ${addedProduct.productTitle} \n productDescription ${addedProduct.productDescription}\n productImageURL ${addedProduct.productImageURL}\n productPrice ${addedProduct.productPrice}");
+    print("productTitle  ${addedProduct.productTitle}"
+        "\n productDescription ${addedProduct.productDescription}"
+        "\n productImageURL ${addedProduct.productImageURL}"
+        "\n productPrice ${addedProduct.productPrice}");
+    // Navigator.of(context).pop();
   }
 
   void updateImageUrl() {
     if (!imageUrlFocusNode.hasFocus) {
+      if (editedProductImageURLController.text.isEmpty ||
+    (!editedProductImageURLController.text.startsWith('http') &&
+              !editedProductImageURLController.text.startsWith('https'))) {
+        return;
+      }
+
       setState(() {});
     }
   }
@@ -57,7 +70,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Products"),
+        title: const Text("New Product"),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
         actions: [
           IconButton(
@@ -89,11 +102,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
               TextFormField(
                 controller: editedProductTitleController,
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                   labelText: "Product Title ",
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
+                  // errorText: "Please enter valid product Title*",
+                  errorStyle: Theme.of(context).textTheme.bodySmall.copyWith(
+                        color: Colors.white,
+                      ),
                 ),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter product Title *';
+                  }
+                  return null;
+                }, //editedProductTitleValidator
                 onSaved: (value) {
                   addedProduct = Product(
                     productId: null,
@@ -104,37 +133,81 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   );
                 },
               ),
-
+              const Divider(),
               //ProductAmount
               TextFormField(
                 controller: editedProductAmountController,
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+
+                    borderSide: BorderSide(
+
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                   labelText: "Product Amount ",
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
                   prefixText: "₹",
+                  // errorText: "Please enter valid product Amount*",
+                  errorStyle: Theme.of(context).textTheme.bodySmall.copyWith(
+                        color: Colors.white,
+                      ),
                 ),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter valid product Amount \*';
+                  }
+                  if (double.tryParse(value) == null) {
+                    return 'Please enter valid Number \*';
+                  }
+                  if (double.parse(value) <= 0) {
+                    return 'Please enter Amount greater then 0 \*';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
                   addedProduct = Product(
                     productId: null,
                     productTitle: addedProduct.productTitle,
                     productDescription: addedProduct.productDescription,
-                    productPrice: double.parse(value).toDouble(),
+                    productPrice: double.parse(value),
                     productImageURL: addedProduct.productImageURL,
                   );
                 },
               ),
+              const Divider(),
               //ProductDescription
               TextFormField(
                 controller: editedProductDescriptionController,
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                   labelText: "Product Description ",
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
+                  // errorText: "Please enter valid product Description*",
+                  errorStyle: Theme.of(context).textTheme.bodySmall.copyWith(
+                        color: Colors.white,
+                      ),
                 ),
                 maxLines: 3,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.multiline,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter product Description \*';
+                  }
+                  if (value.length < 10) {
+                    return 'Should be at least 10 character long Description \*';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
                   addedProduct = Product(
                     productId: null,
@@ -145,13 +218,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   );
                 },
               ),
+              const Divider(),
               // Product ImageURL
               Row(
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    width: 100,
-                    height: 100,
+                    width: 175,
+                    height: 150,
                     margin: const EdgeInsets.fromLTRB(0, 10, 10, 10),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -168,6 +242,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             textAlign: TextAlign.center,
                           )
                         : FittedBox(
+                            fit: BoxFit.scaleDown,
                             child: Image.network(
                               editedProductImageURLController.text,
                               fit: BoxFit.fill,
@@ -178,12 +253,33 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     child: TextFormField(
                       controller: editedProductImageURLController,
                       decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                         labelText: "Product ImageURL ",
                         labelStyle: Theme.of(context).textTheme.bodyLarge,
+                        // errorText: "Please enter valid product ImageURL*",
+                        errorStyle:
+                            Theme.of(context).textTheme.bodySmall.copyWith(
+                                  color: Colors.white,
+                                ),
                       ),
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
                       focusNode: imageUrlFocusNode,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter product ImageURL *';
+                        }
+                        if (!value.startsWith('http') &&
+                            !value.startsWith('https')) {
+                          return 'Please enter valid \n product ImageURL *';
+                        }
+                        return null;
+                      },
                       onEditingComplete: () {
                         setState(() {});
                       },
@@ -203,8 +299,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   ),
                 ],
               ),
-
-              //
+              const Divider(),
             ],
           ),
         ),
