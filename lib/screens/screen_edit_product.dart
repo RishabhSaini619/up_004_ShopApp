@@ -28,10 +28,32 @@ class _EditProductScreenState extends State<EditProductScreen> {
               );
             },
           ),
-
         ],
       ),
-
+      body: Container(
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(45),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.primary,
+            width: 1,
+          ),
+        ),
+        child: Form(
+          child: ListTile(
+            leading: Text(
+              "Product Title ",
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            title: TextFormField(
+              textInputAction: TextInputAction.next,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
