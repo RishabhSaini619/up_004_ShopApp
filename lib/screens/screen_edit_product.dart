@@ -8,6 +8,19 @@ class EditProductScreen extends StatefulWidget {
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
+  final editedProductTitleController = TextEditingController();
+  final editedProductDescriptionController = TextEditingController();
+  final editedProductImageURLController = TextEditingController();
+  final editedProductAmountController = TextEditingController();
+  @override
+  void dispose() {
+    editedProductTitleController.dispose();
+    editedProductDescriptionController.dispose();
+    editedProductImageURLController.dispose();
+    editedProductAmountController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,71 +45,99 @@ class _EditProductScreenState extends State<EditProductScreen> {
       ),
       body: Container(
         margin: const EdgeInsets.all(10),
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(20),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(45),
+          borderRadius: BorderRadius.circular(30),
           border: Border.all(
             color: Theme.of(context).colorScheme.primary,
             width: 1,
           ),
         ),
         child: Form(
-          child: Column(
+          child: ListView(
             children: [
-              //Product Title
-              ListTile(
-                leading: Text(
-                  "Product Title ",
-                  style: Theme.of(context).textTheme.bodyLarge,
+              //ProductTitle
+              TextFormField(
+                controller: editedProductTitleController,
+                decoration: InputDecoration(
+                  labelText: "Product Title ",
+                  labelStyle: Theme.of(context).textTheme.bodyLarge,
                 ),
-                title: TextFormField(
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-
-                ),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.text,
               ),
-              //Product Description
-              ListTile(
-                leading: Text(
-                  "Product Description ",
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                title: TextFormField(
-                  maxLines: 3,
-                  keyboardType: TextInputType.multiline,
 
-
+              //ProductAmount
+              TextFormField(
+                controller: editedProductAmountController,
+                decoration: InputDecoration(
+                  labelText: "Product Amount ",
+                  labelStyle: Theme.of(context).textTheme.bodyLarge,
+                  prefixText: "₹",
                 ),
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
               ),
-              //Product ImageURL
-              ListTile(
-                leading: Text(
-                  "Product ImageURL ",
-                  style: Theme.of(context).textTheme.bodyLarge,
+              //ProductDescription
+              TextFormField(
+                controller: editedProductDescriptionController,
+                decoration: InputDecoration(
+                  labelText: "Product Description ",
+                  labelStyle: Theme.of(context).textTheme.bodyLarge,
                 ),
-                title: TextFormField(
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-
-                ),
+                maxLines: 3,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.multiline,
               ),
-              //Product Amount
-              ListTile(
-                leading: Text(
-                  "Product Amount",
-                  style: Theme.of(context).textTheme.bodyLarge,
-
-                ),
-                title: TextFormField(
-                  decoration: const InputDecoration(
-                    prefixText: "₹",
+              // Product ImageURL
+              Row(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: 100,
+                    height: 100,
+                    margin: const EdgeInsets.fromLTRB(0, 10, 10, 10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 1,
+                      ),
+                    ),
+                    child: editedProductImageURLController.text.isEmpty
+                        ? const Text(
+                            "Enter Url",
+                            textAlign: TextAlign.center,
+                          )
+                        : FittedBox(
+                            child: Image.network(
+                              editedProductImageURLController.text,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                   ),
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.number,
-                ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: editedProductImageURLController,
+                      decoration: InputDecoration(
+                        labelText: "Product ImageURL ",
+                        labelStyle: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      keyboardType: TextInputType.url,
+                      textInputAction: TextInputAction.done,
+                      onEditingComplete: () {
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                ],
               ),
+
+              //
             ],
           ),
         ),
