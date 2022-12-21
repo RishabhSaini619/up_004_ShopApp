@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:up_004_shopapp/model/model_product.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/EditProductScreen';
@@ -12,12 +13,43 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final editedProductDescriptionController = TextEditingController();
   final editedProductImageURLController = TextEditingController();
   final editedProductAmountController = TextEditingController();
+  final imageUrlFocusNode = FocusNode();
+  final formKey = GlobalKey<FormState>();
+
+  var addedProduct = Product(
+    productId: null,
+    productTitle: "",
+    productDescription: "",
+    productPrice: 0.0,
+    productImageURL: "",
+  );
+
+  void updateProduct() {
+    formKey.currentState.save();
+    print(
+        "productTitle  ${addedProduct.productTitle} \n productDescription ${addedProduct.productDescription}\n productImageURL ${addedProduct.productImageURL}\n productPrice ${addedProduct.productPrice}");
+  }
+
+  void updateImageUrl() {
+    if (!imageUrlFocusNode.hasFocus) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    imageUrlFocusNode.addListener(updateImageUrl);
+    super.initState();
+  }
+
   @override
   void dispose() {
+    imageUrlFocusNode.removeListener(updateImageUrl);
     editedProductTitleController.dispose();
     editedProductDescriptionController.dispose();
     editedProductImageURLController.dispose();
     editedProductAmountController.dispose();
+    imageUrlFocusNode.dispose();
     super.dispose();
   }
 
@@ -33,13 +65,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
               Icons.save_as_sharp,
               size: 30,
             ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => EditProductScreen(),
-                ),
-              );
-            },
+            onPressed: updateProduct,
           ),
         ],
       ),
@@ -56,6 +82,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           ),
         ),
         child: Form(
+          key: formKey,
           child: ListView(
             children: [
               //ProductTitle
@@ -67,6 +94,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
+                onSaved: (value) {
+                  addedProduct = Product(
+                    productId: null,
+                    productTitle: value,
+                    productDescription: addedProduct.productDescription,
+                    productPrice: addedProduct.productPrice,
+                    productImageURL: addedProduct.productImageURL,
+                  );
+                },
               ),
 
               //ProductAmount
@@ -79,6 +115,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
+                onSaved: (value) {
+                  addedProduct = Product(
+                    productId: null,
+                    productTitle: addedProduct.productTitle,
+                    productDescription: addedProduct.productDescription,
+                    productPrice: double.parse(value).toDouble(),
+                    productImageURL: addedProduct.productImageURL,
+                  );
+                },
               ),
               //ProductDescription
               TextFormField(
@@ -90,6 +135,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 maxLines: 3,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.multiline,
+                onSaved: (value) {
+                  addedProduct = Product(
+                    productId: null,
+                    productTitle: addedProduct.productTitle,
+                    productDescription: value,
+                    productPrice: addedProduct.productPrice,
+                    productImageURL: addedProduct.productImageURL,
+                  );
+                },
               ),
               // Product ImageURL
               Row(
@@ -116,7 +170,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         : FittedBox(
                             child: Image.network(
                               editedProductImageURLController.text,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fill,
                             ),
                           ),
                   ),
@@ -129,8 +183,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       ),
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
+                      focusNode: imageUrlFocusNode,
                       onEditingComplete: () {
                         setState(() {});
+                      },
+                      onFieldSubmitted: (_) {
+                        updateProduct();
+                      },
+                      onSaved: (value) {
+                        addedProduct = Product(
+                          productId: null,
+                          productTitle: addedProduct.productTitle,
+                          productDescription: addedProduct.productDescription,
+                          productPrice: addedProduct.productPrice,
+                          productImageURL: value,
+                        );
                       },
                     ),
                   ),
