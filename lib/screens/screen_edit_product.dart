@@ -14,6 +14,22 @@ class _EditProductScreenState extends State<EditProductScreen> {
       appBar: AppBar(
         title: const Text("Edit Products"),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.save_as_sharp,
+              size: 30,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => EditProductScreen(),
+                ),
+              );
+            },
+          ),
+
+        ],
       ),
 
     );

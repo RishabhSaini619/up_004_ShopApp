@@ -22,7 +22,11 @@ class ManageProductsScreen extends StatelessWidget {
               size: 30,
             ),
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed(EditProductScreen.routeName);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => EditProductScreen(),
+                ),
+              );
             },
           ),
         ],
