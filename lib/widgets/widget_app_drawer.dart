@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:up_004_shopapp/screens/screen_orders.dart';
 import 'package:up_004_shopapp/screens/screen_products_overview.dart';
 
+import '../screens/screen_manage_products.dart';
+
 class AppDrawer extends StatelessWidget {
 
   @override
@@ -17,7 +19,6 @@ class AppDrawer extends StatelessWidget {
               titleTextStyle: Theme.of(context).textTheme.titleLarge,
               automaticallyImplyLeading: false,
             ),
-            const Divider(),
             ListTile(
               leading: const Icon(Icons.shopping_bag_sharp),
               title: Text(
@@ -25,7 +26,7 @@ class AppDrawer extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               onTap: () {
-                Navigator.of(context).pushNamed(ProductsOverviewScreen.routeName);
+                Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
               },
             ),
             const Divider(),
@@ -36,12 +37,24 @@ class AppDrawer extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               onTap: () {
-                Navigator.of(context).pushNamed(OrdersScreen.routeName);
+                Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
               },
             ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.edit_note_sharp),
+              title: Text(
+                "Manage Products",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed(ManageProductsScreen.routeName);
+              },
+            ),
+            const Divider(),
             const Spacer(),
             Text(
-              "App developed by RishabhSaini619",
+              "@RishabhSaini619",
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
