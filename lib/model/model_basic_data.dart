@@ -33,4 +33,12 @@ import 'model_product.dart';
     productImageURL:
     'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
   ),
+   // Product(
+   //   productId: 'p5',
+   //   productTitle: 'Scarf',
+   //   productDescription: 'Warm and cozy Yellow Scarf - exactly what you need for the winter.',
+   //   productPrice: 99.99,
+   //   productImageURL:
+   //   'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
+   // ),
 ];

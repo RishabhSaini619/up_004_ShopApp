@@ -1,12 +1,19 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../model/model_orders.dart';
 
-class OrderItemWidget extends StatelessWidget {
+class OrderItemWidget extends StatefulWidget {
   final OrderItem orderItemWidgetOrders;
 
   const OrderItemWidget(this.orderItemWidgetOrders);
 
+  @override
+  State<OrderItemWidget> createState() => _OrderItemWidgetState();
+}
+
+class _OrderItemWidgetState extends State<OrderItemWidget> {
+  var expandedOrderItem = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,6 +29,15 @@ class OrderItemWidget extends StatelessWidget {
         ),
       ),
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+            side: BorderSide(
+                width: 2,
+                color: Theme.of(context).colorScheme.primary,
+            )
+
+        ),
+
         margin: const EdgeInsets.all(10),
         child: Column(
           children: [
@@ -33,7 +49,7 @@ class OrderItemWidget extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   Text(
-                    '₹ ${orderItemWidgetOrders.orderItemAmount}',
+                    '₹ ${widget.orderItemWidgetOrders.orderItemAmount}',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
@@ -45,17 +61,55 @@ class OrderItemWidget extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
-                      DateFormat("dd/mm/yyyy hh:mm ")
-                          .format(orderItemWidgetOrders.orderItemDate),
+                    DateFormat("dd/mm/yyyy hh:mm ")
+                        .format(widget.orderItemWidgetOrders.orderItemDate),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),
-              trailing: const IconButton(
-                icon: Icon(Icons.expand_more),
-                // onPressed: () {} ,
+              trailing: IconButton(
+                icon: Icon(
+                  expandedOrderItem
+                      ? Icons.expand_less_rounded
+                      : Icons.expand_more,
+                ),
+                onPressed: () {
+                  setState(() {
+                    expandedOrderItem = !expandedOrderItem;
+                  });
+                },
               ),
             ),
+            if (expandedOrderItem)
+              Container(
+                height: min(
+                  widget.orderItemWidgetOrders.orderItemProducts.length * 20.0 +
+                      15,
+                  150,
+                ),
+                padding: const EdgeInsets.all(5),
+                margin: const EdgeInsets.all(10),
+
+                child: ListView(
+                  children: widget.orderItemWidgetOrders.orderItemProducts
+                      .map(
+                        (products) => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              products.cartItemTitle,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            Text(
+                             " ${products.cartItemQuantity} x ₹ ${products.cartItemPrice}",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
           ],
         ),
       ),
