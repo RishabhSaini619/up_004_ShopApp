@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:up_004_shopapp/model/model_orders.dart';
 import '../widgets/widget_cart_item.dart';
 import '../model/model_cart.dart' show Cart;
 
@@ -64,15 +65,18 @@ class CartScreen extends StatelessWidget {
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                           side: BorderSide(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                ,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<Orders>(context, listen: false).addOrder(
+                        cart.items.values.toList(),
+                        cart.totalAmount,
+                      );
+                      cart.clearCartItem();
+                    },
                     child: Text(
                       'Order',
                       style: Theme.of(context).textTheme.bodyLarge.copyWith(
