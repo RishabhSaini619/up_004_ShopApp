@@ -77,7 +77,6 @@ class CartItemWidget extends StatelessWidget {
             title: Text(
               cardItemTitle,
               textAlign: TextAlign.left,
-
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             subtitle: Row(
