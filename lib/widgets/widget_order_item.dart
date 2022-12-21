@@ -26,15 +26,30 @@ class OrderItemWidget extends StatelessWidget {
         child: Column(
           children: [
             ListTile(
-              title: Text(
-                '₹ ${orderItemWidgetOrders.orderItemAmount}',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
+              title: Row(
+                children: [
+                  Text(
+                    'Order Amount :-  ',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  Text(
+                    '₹ ${orderItemWidgetOrders.orderItemAmount}',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
               ),
-              subtitle: Text(
-                DateFormat("dd MM yyyy hh:mm:ss")
-                    .format(orderItemWidgetOrders.orderItemDate),
-                style: Theme.of(context).textTheme.bodyMedium,
+              subtitle: Row(
+                children: [
+                  Text(
+                    "Order Date :-  ",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  Text(
+                      DateFormat("dd/mm/yyyy hh:mm ")
+                          .format(orderItemWidgetOrders.orderItemDate),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
               ),
               trailing: const IconButton(
                 icon: Icon(Icons.expand_more),
