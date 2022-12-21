@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'providers/provider_product.dart';
+import 'model/model_product.dart';
 import 'screens/screen_orders.dart';
 import 'screens/screen_product_detail.dart';
 import 'screens/screen_products_overview.dart';

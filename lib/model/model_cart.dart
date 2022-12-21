@@ -44,6 +44,7 @@ class Cart with ChangeNotifier {
     }
   }
 
+  @override
   notifyListeners();
 
   void removeItem(String productId) {

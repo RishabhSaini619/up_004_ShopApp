@@ -7,37 +7,45 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
-        children: [
-          AppBar(
-            title: const Text("Hii :)"),
-            centerTitle: false,
-            titleTextStyle: Theme.of(context).textTheme.titleLarge,
-            automaticallyImplyLeading: false,
-          ),
-          Divider(),
-          ListTile(
-            leading: const Icon(Icons.shopping_bag_sharp),
-            title: Text(
-              "Shop",
-              style: Theme.of(context).textTheme.titleMedium,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Column(
+          children: [
+            AppBar(
+              title: const Text("Hii :)"),
+              centerTitle: false,
+              titleTextStyle: Theme.of(context).textTheme.titleLarge,
+              automaticallyImplyLeading: false,
             ),
-            onTap: () {
-              Navigator.of(context).pushNamed(ProductsOverviewScreen.routeName);
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: const Icon(Icons.shopping_cart_checkout_sharp),
-            title: Text(
-              "Orders",
-              style: Theme.of(context).textTheme.titleMedium,
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.shopping_bag_sharp),
+              title: Text(
+                "Shop",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed(ProductsOverviewScreen.routeName);
+              },
             ),
-            onTap: () {
-              Navigator.of(context).pushNamed(OrdersScreen.routeName);
-            },
-          ),
-        ],
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.shopping_cart_checkout_sharp),
+              title: Text(
+                "Orders",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed(OrdersScreen.routeName);
+              },
+            ),
+            const Spacer(),
+            Text(
+              "App developed by RishabhSaini619",
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
       ),
     );
   }

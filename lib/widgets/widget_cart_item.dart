@@ -44,6 +44,83 @@ class CartItemWidget extends StatelessWidget {
       onDismissed: (direction) {
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
+      confirmDismiss: (direction) {
+        return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+              side: BorderSide(
+                color: Color(0xffff5722),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(30),
+              ),
+            ),
+            titlePadding: const EdgeInsets.fromLTRB(20, 30, 20, 5),
+            title: const Text("Are you sure?"),
+            titleTextStyle: Theme.of(context).textTheme.titleLarge,
+            contentPadding: const EdgeInsets.fromLTRB(20, 5, 20, 30),
+            content: const Text("You want to remove the item from the Cart?"),
+            contentTextStyle: Theme.of(context).textTheme.bodyMedium,
+            actionsPadding: const EdgeInsets.all(20),
+            actions: [
+              //no
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(
+                    Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                  ),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: const BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(
+                  'No',
+                  style: Theme.of(context).textTheme.bodySmall.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              //yes
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      const MaterialStatePropertyAll<Color>(Colors.white),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+
+                },
+                child: Text(
+                  'REMOVE',
+                  style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
+              ),
+
+            ],
+          ),
+        );
+        // Future.value(true);
+      },
       child: Card(
         shape: StadiumBorder(
           side: BorderSide(
