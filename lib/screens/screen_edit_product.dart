@@ -43,14 +43,61 @@ class _EditProductScreenState extends State<EditProductScreen> {
           ),
         ),
         child: Form(
-          child: ListTile(
-            leading: Text(
-              "Product Title ",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            title: TextFormField(
-              textInputAction: TextInputAction.next,
-            ),
+          child: Column(
+            children: [
+              //Product Title
+              ListTile(
+                leading: Text(
+                  "Product Title ",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                title: TextFormField(
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.text,
+
+                ),
+              ),
+              //Product Description
+              ListTile(
+                leading: Text(
+                  "Product Description ",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                title: TextFormField(
+                  maxLines: 3,
+                  keyboardType: TextInputType.multiline,
+
+
+                ),
+              ),
+              //Product ImageURL
+              ListTile(
+                leading: Text(
+                  "Product ImageURL ",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                title: TextFormField(
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.text,
+
+                ),
+              ),
+              //Product Amount
+              ListTile(
+                leading: Text(
+                  "Product Amount",
+                  style: Theme.of(context).textTheme.bodyLarge,
+
+                ),
+                title: TextFormField(
+                  decoration: const InputDecoration(
+                    prefixText: "₹",
+                  ),
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+            ],
           ),
         ),
       ),
