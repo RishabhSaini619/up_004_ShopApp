@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import '../model/model_basic_data.dart';
+import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier {
   final String productId;
@@ -51,6 +53,20 @@ class Products with ChangeNotifier {
 // }
 
   void addProduct(Product addedProduct) {
+    const url =
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/products.json';
+    http.post(
+      url,
+      body: json.encode(
+        {
+          'productTitle': addedProduct.productTitle,
+          'productDescription': addedProduct.productDescription,
+          'productPrice': addedProduct.productPrice,
+          'productImageURL': addedProduct.productImageURL,
+          'isProductFavorite': addedProduct.isProductFavorite,
+        },
+      ),
+    );
     final newProduct = Product(
       productId: DateTime.now().toString(),
       productTitle: addedProduct.productTitle,
@@ -70,15 +86,15 @@ class Products with ChangeNotifier {
     if (updateProductIndex >= 0) {
       _items[updateProductIndex] = updatingProduct;
       notifyListeners();
-    }
-    else {
+    } else {
       print("Invalid updateProductIndex");
     }
-
   }
 
-  void deleteProduct(String deletingProductID,) {
-    _items.removeWhere((element) => element.productId == deletingProductID );
+  void deleteProduct(
+    String deletingProductID,
+  ) {
+    _items.removeWhere((element) => element.productId == deletingProductID);
     notifyListeners();
   }
 

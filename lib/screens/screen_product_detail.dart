@@ -24,6 +24,7 @@ class ProductDetailScreen extends StatelessWidget {
     ).findById(productID);
     Widget containerWidget(Widget containerWidget, double borderWidth) {
       return Container(
+
         width: double.infinity,
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(15),
@@ -73,12 +74,15 @@ class ProductDetailScreen extends StatelessWidget {
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
       ),
       body: SingleChildScrollView(
+
         child: containerWidget(
-          Column( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                height: 500,
+                height: 400,
                 width: double.infinity,
                 margin: const EdgeInsets.all(5),
                 padding: const EdgeInsets.all(5),
@@ -94,7 +98,7 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
                 child: Image.network(
                   loadedProduct.productImageURL,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.contain,
                 ),
               ),
               const SizedBox(height: 10),
