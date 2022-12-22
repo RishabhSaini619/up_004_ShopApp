@@ -35,7 +35,10 @@ class ManageProductsScreen extends StatelessWidget {
           itemBuilder: (context, index) => Column(
             children: [
               ManageProductsItemWidget(
+                productsData.items[index].productId,
                 productsData.items[index].productTitle,
+                productsData.items[index].productDescription,
+                productsData.items[index].productPrice,
                 productsData.items[index].productImageURL,
               ),
               const Divider(),

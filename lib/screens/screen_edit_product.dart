@@ -26,21 +26,35 @@ class _EditProductScreenState extends State<EditProductScreen> {
     productPrice: 0.0,
     productImageURL: "",
   );
+  var initialProductValue = {
+    'productTitle': '',
+    'productDescription': '',
+    'productPrice': '',
+    'productImageURL': '',
+  };
 
   void addNewProduct() {
     final isEditedValidator = formKey.currentState.validate();
     if (!isEditedValidator) {
       return;
     }
+
     formKey.currentState.save();
-    Provider.of<Products>(context,listen : false).addProduct(addedProduct);
+    if (addedProduct.productId != null) {
+      Provider.of<Products>(context, listen: false).updateProduct(
+        addedProduct.productId,
+        addedProduct,
+      );
+    } else {
+      Provider.of<Products>(context, listen: false).addProduct(addedProduct);
+    }
     Navigator.of(context).pop();
   }
 
   void updateImageUrl() {
     if (!imageUrlFocusNode.hasFocus) {
       if (editedProductImageURLController.text.isEmpty ||
-    (!editedProductImageURLController.text.startsWith('http') &&
+          (!editedProductImageURLController.text.startsWith('http') &&
               !editedProductImageURLController.text.startsWith('https'))) {
         return;
       }
@@ -49,10 +63,35 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
+  bool isInIt = true;
   @override
   void initState() {
     imageUrlFocusNode.addListener(updateImageUrl);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (isInIt) {
+      final editingProductID =
+          ModalRoute.of(context).settings.arguments as String;
+      if (editingProductID != null) {
+        final editingProduct = Provider.of<Products>(context, listen: false)
+            .findById(editingProductID);
+
+        addedProduct = editingProduct;
+
+        editedProductTitleController.text = editingProduct.productTitle;
+        editedProductDescriptionController.text =
+            editingProduct.productDescription;
+        editedProductAmountController.text =
+            editingProduct.productPrice.toString();
+        editedProductImageURLController.text = editingProduct.productImageURL;
+      }
+    }
+    isInIt = false;
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -108,8 +147,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-                  labelText: "Product Title ",
+                  labelText: "Title ",
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
+                  hintText: "Product Title ",
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,
                   // errorText: "Please enter valid product Title*",
                   errorStyle: Theme.of(context).textTheme.bodySmall.copyWith(
                         color: Colors.white,
@@ -125,7 +166,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 }, //editedProductTitleValidator
                 onSaved: (value) {
                   addedProduct = Product(
-                    productId: null,
+                    productId: addedProduct.productId,
+                    isProductFavorite: addedProduct.isProductFavorite,
                     productTitle: value,
                     productDescription: addedProduct.productDescription,
                     productPrice: addedProduct.productPrice,
@@ -140,14 +182,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-
                     borderSide: BorderSide(
-
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-                  labelText: "Product Amount ",
+                  labelText: "Amount ",
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
+                  hintText: "Product Amount ",
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,
                   prefixText: "₹",
                   // errorText: "Please enter valid product Amount*",
                   errorStyle: Theme.of(context).textTheme.bodySmall.copyWith(
@@ -170,7 +212,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
                 onSaved: (value) {
                   addedProduct = Product(
-                    productId: null,
+                    productId: addedProduct.productId,
+                    isProductFavorite: addedProduct.isProductFavorite,
                     productTitle: addedProduct.productTitle,
                     productDescription: addedProduct.productDescription,
                     productPrice: double.parse(value),
@@ -189,8 +232,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-                  labelText: "Product Description ",
+                  labelText: "Description ",
                   labelStyle: Theme.of(context).textTheme.bodyLarge,
+                  hintText: "Product Description ",
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,
                   // errorText: "Please enter valid product Description*",
                   errorStyle: Theme.of(context).textTheme.bodySmall.copyWith(
                         color: Colors.white,
@@ -210,7 +255,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
                 onSaved: (value) {
                   addedProduct = Product(
-                    productId: null,
+                    productId: addedProduct.productId,
+                    isProductFavorite: addedProduct.isProductFavorite,
                     productTitle: addedProduct.productTitle,
                     productDescription: value,
                     productPrice: addedProduct.productPrice,
@@ -259,8 +305,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                        labelText: "Product ImageURL ",
+                        labelText: "ImageURL ",
                         labelStyle: Theme.of(context).textTheme.bodyLarge,
+                        hintText: "Product ImageURL ",
+                        hintStyle: Theme.of(context).textTheme.bodyMedium,
                         // errorText: "Please enter valid product ImageURL*",
                         errorStyle:
                             Theme.of(context).textTheme.bodySmall.copyWith(
@@ -288,11 +336,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       },
                       onSaved: (value) {
                         addedProduct = Product(
-                          productId: null,
                           productTitle: addedProduct.productTitle,
                           productDescription: addedProduct.productDescription,
                           productPrice: addedProduct.productPrice,
                           productImageURL: value,
+                          productId: addedProduct.productId,
+                          isProductFavorite: addedProduct.isProductFavorite,
                         );
                       },
                     ),
