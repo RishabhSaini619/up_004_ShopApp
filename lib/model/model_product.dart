@@ -24,7 +24,6 @@ class Product with ChangeNotifier {
   }
 }
 
-
 class Products with ChangeNotifier {
   final List<Product> _items = basicProductData;
 
@@ -36,6 +35,7 @@ class Products with ChangeNotifier {
     //}
     return [..._items];
   }
+
   List<Product> get favoritesItems {
     return _items.where((element) => element.isProductFavorite).toList();
   }
@@ -50,8 +50,16 @@ class Products with ChangeNotifier {
 //   notifyListeners();
 // }
 
-  void addProduct() {
-    // _items.add(value);
+  void addProduct(Product addedProduct) {
+    final newProduct = Product(
+      productId: DateTime.now().toString(),
+      productTitle: addedProduct.productTitle,
+      productDescription: addedProduct.productDescription,
+      productPrice: addedProduct.productPrice,
+      productImageURL: addedProduct.productImageURL,
+    );
+    _items.add(newProduct);
+    // items.insert(0, newProduct);
     notifyListeners();
   }
 

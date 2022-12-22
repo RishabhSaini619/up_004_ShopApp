@@ -1,4 +1,7 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:up_004_shopapp/model/model_product.dart';
 
 class EditProductScreen extends StatefulWidget {
@@ -24,17 +27,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
     productImageURL: "",
   );
 
-  void updateProduct() {
+  void addNewProduct() {
     final isEditedValidator = formKey.currentState.validate();
     if (!isEditedValidator) {
       return;
     }
     formKey.currentState.save();
-    print("productTitle  ${addedProduct.productTitle}"
-        "\n productDescription ${addedProduct.productDescription}"
-        "\n productImageURL ${addedProduct.productImageURL}"
-        "\n productPrice ${addedProduct.productPrice}");
-    // Navigator.of(context).pop();
+    Provider.of<Products>(context,listen : false).addProduct(addedProduct);
+    Navigator.of(context).pop();
   }
 
   void updateImageUrl() {
@@ -78,7 +78,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
               Icons.save_as_sharp,
               size: 30,
             ),
-            onPressed: updateProduct,
+            onPressed: addNewProduct,
           ),
         ],
       ),
@@ -158,13 +158,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter valid product Amount \*';
+                    return 'Please enter valid product Amount *';
                   }
                   if (double.tryParse(value) == null) {
-                    return 'Please enter valid Number \*';
+                    return 'Please enter valid Number *';
                   }
                   if (double.parse(value) <= 0) {
-                    return 'Please enter Amount greater then 0 \*';
+                    return 'Please enter Amount greater then 0 *';
                   }
                   return null;
                 },
@@ -201,10 +201,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 keyboardType: TextInputType.multiline,
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter product Description \*';
+                    return 'Please enter product Description *';
                   }
                   if (value.length < 10) {
-                    return 'Should be at least 10 character long Description \*';
+                    return 'Should be at least 10 character long Description *';
                   }
                   return null;
                 },
@@ -284,7 +284,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         setState(() {});
                       },
                       onFieldSubmitted: (_) {
-                        updateProduct();
+                        addNewProduct();
                       },
                       onSaved: (value) {
                         addedProduct = Product(
