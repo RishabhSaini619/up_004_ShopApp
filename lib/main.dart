@@ -110,7 +110,7 @@ class MyApp extends StatelessWidget {
             systemOverlayStyle: SystemUiOverlayStyle.light,
           ),
         ),
-        home:  ManageProductsScreen(),
+        home:  const ProductsOverviewScreen(),
         routes: {
           ProductsOverviewScreen.routeName: (ctx) => const ProductsOverviewScreen(),
           ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
