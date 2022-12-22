@@ -54,7 +54,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product addedProduct) {
     const url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/products.json';
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json';
     return http
         .post(
       url,
@@ -78,6 +78,9 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       // items.insert(0, newProduct);
       notifyListeners();
+    }).catchError((error) {
+      print(error);
+      throw error;
     });
   }
 

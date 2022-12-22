@@ -61,7 +61,55 @@ class _EditProductScreenState extends State<EditProductScreen> {
       Provider.of<Products>(
         context,
         listen: false,
-      ).addProduct(addedProduct).then(
+      ).addProduct(addedProduct).catchError((error) {
+       return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+              side: BorderSide(
+                color: Color(0xffff5722),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(30),
+              ),
+            ),
+            alignment: Alignment.center,
+
+            title: const Text("An error occurred!"),
+            titleTextStyle: Theme.of(context).textTheme.titleLarge,
+            content: Text(error.toString()),
+            contentTextStyle: Theme.of(context).textTheme.bodyMedium,
+            actions: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                  const MaterialStatePropertyAll<Color>(Colors.white),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+
+                },
+                child: Text(
+                  'Okay',
+                  style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+        );
+      }).then(
         (_) {
           setState(() {
             isLoading = false;
@@ -153,175 +201,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
             width: 1,
           ),
         ),
-        child: isLoading ?Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 1,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ): Form(
-          key: formKey,
-          child: ListView(
-            children: [
-              //ProductTitle
-              TextFormField(
-                controller: editedProductTitleController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  labelText: "Title ",
-                  labelStyle: Theme.of(context).textTheme.bodyLarge,
-                  hintText: "Product Title ",
-                  hintStyle: Theme.of(context).textTheme.bodyMedium,
-                  // errorText: "Please enter valid product Title*",
-                  errorStyle: Theme.of(context).textTheme.bodySmall.copyWith(
-                        color: Colors.white,
-                      ),
+        child: isLoading
+            ? Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter product Title *';
-                  }
-                  return null;
-                }, //editedProductTitleValidator
-                onSaved: (value) {
-                  addedProduct = Product(
-                    productId: addedProduct.productId,
-                    isProductFavorite: addedProduct.isProductFavorite,
-                    productTitle: value,
-                    productDescription: addedProduct.productDescription,
-                    productPrice: addedProduct.productPrice,
-                    productImageURL: addedProduct.productImageURL,
-                  );
-                },
-              ),
-              const Divider(),
-              //ProductAmount
-              TextFormField(
-                controller: editedProductAmountController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  labelText: "Amount ",
-                  labelStyle: Theme.of(context).textTheme.bodyLarge,
-                  hintText: "Product Amount ",
-                  hintStyle: Theme.of(context).textTheme.bodyMedium,
-                  prefixText: "₹",
-                  // errorText: "Please enter valid product Amount*",
-                  errorStyle: Theme.of(context).textTheme.bodySmall.copyWith(
-                        color: Colors.white,
-                      ),
-                ),
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter valid product Amount *';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter valid Number *';
-                  }
-                  if (double.parse(value) <= 0) {
-                    return 'Please enter Amount greater then 0 *';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  addedProduct = Product(
-                    productId: addedProduct.productId,
-                    isProductFavorite: addedProduct.isProductFavorite,
-                    productTitle: addedProduct.productTitle,
-                    productDescription: addedProduct.productDescription,
-                    productPrice: double.parse(value),
-                    productImageURL: addedProduct.productImageURL,
-                  );
-                },
-              ),
-              const Divider(),
-              //ProductDescription
-              TextFormField(
-                controller: editedProductDescriptionController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  labelText: "Description ",
-                  labelStyle: Theme.of(context).textTheme.bodyLarge,
-                  hintText: "Product Description ",
-                  hintStyle: Theme.of(context).textTheme.bodyMedium,
-                  // errorText: "Please enter valid product Description*",
-                  errorStyle: Theme.of(context).textTheme.bodySmall.copyWith(
-                        color: Colors.white,
-                      ),
-                ),
-                maxLines: 3,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.multiline,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter product Description *';
-                  }
-                  if (value.length < 10) {
-                    return 'Should be at least 10 character long Description *';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  addedProduct = Product(
-                    productId: addedProduct.productId,
-                    isProductFavorite: addedProduct.isProductFavorite,
-                    productTitle: addedProduct.productTitle,
-                    productDescription: value,
-                    productPrice: addedProduct.productPrice,
-                    productImageURL: addedProduct.productImageURL,
-                  );
-                },
-              ),
-              const Divider(),
-              // Product ImageURL
-              Row(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 175,
-                    height: 150,
-                    margin: const EdgeInsets.fromLTRB(0, 10, 10, 10),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 1,
-                      ),
-                    ),
-                    child: editedProductImageURLController.text.isEmpty
-                        ? const Text(
-                            "Enter Url",
-                            textAlign: TextAlign.center,
-                          )
-                        : FittedBox(
-                            child: Image.network(
-                              editedProductImageURLController.text,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      controller: editedProductImageURLController,
+              )
+            : Form(
+                key: formKey,
+                child: ListView(
+                  children: [
+                    //ProductTitle
+                    TextFormField(
+                      controller: editedProductTitleController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -329,53 +222,217 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                        labelText: "ImageURL ",
+                        labelText: "Title ",
                         labelStyle: Theme.of(context).textTheme.bodyLarge,
-                        hintText: "Product ImageURL ",
+                        hintText: "Product Title ",
                         hintStyle: Theme.of(context).textTheme.bodyMedium,
-                        // errorText: "Please enter valid product ImageURL*",
+                        // errorText: "Please enter valid product Title*",
                         errorStyle:
                             Theme.of(context).textTheme.bodySmall.copyWith(
                                   color: Colors.white,
                                 ),
                       ),
-                      keyboardType: TextInputType.url,
-                      textInputAction: TextInputAction.done,
-                      focusNode: imageUrlFocusNode,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.text,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please enter product ImageURL *';
-                        }
-                        if (!value.startsWith('http') &&
-                            !value.startsWith('https')) {
-                          return 'Please enter valid \n product ImageURL *';
+                          return 'Please enter product Title *';
                         }
                         return null;
-                      },
-                      onEditingComplete: () {
-                        setState(() {});
-                      },
-                      onFieldSubmitted: (_) {
-                        addNewProduct();
-                      },
+                      }, //editedProductTitleValidator
                       onSaved: (value) {
                         addedProduct = Product(
-                          productTitle: addedProduct.productTitle,
-                          productDescription: addedProduct.productDescription,
-                          productPrice: addedProduct.productPrice,
-                          productImageURL: value,
                           productId: addedProduct.productId,
                           isProductFavorite: addedProduct.isProductFavorite,
+                          productTitle: value,
+                          productDescription: addedProduct.productDescription,
+                          productPrice: addedProduct.productPrice,
+                          productImageURL: addedProduct.productImageURL,
                         );
                       },
                     ),
-                  ),
-                ],
+                    const Divider(),
+                    //ProductAmount
+                    TextFormField(
+                      controller: editedProductAmountController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        labelText: "Amount ",
+                        labelStyle: Theme.of(context).textTheme.bodyLarge,
+                        hintText: "Product Amount ",
+                        hintStyle: Theme.of(context).textTheme.bodyMedium,
+                        prefixText: "₹",
+                        // errorText: "Please enter valid product Amount*",
+                        errorStyle:
+                            Theme.of(context).textTheme.bodySmall.copyWith(
+                                  color: Colors.white,
+                                ),
+                      ),
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter valid product Amount *';
+                        }
+                        if (double.tryParse(value) == null) {
+                          return 'Please enter valid Number *';
+                        }
+                        if (double.parse(value) <= 0) {
+                          return 'Please enter Amount greater then 0 *';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        addedProduct = Product(
+                          productId: addedProduct.productId,
+                          isProductFavorite: addedProduct.isProductFavorite,
+                          productTitle: addedProduct.productTitle,
+                          productDescription: addedProduct.productDescription,
+                          productPrice: double.parse(value),
+                          productImageURL: addedProduct.productImageURL,
+                        );
+                      },
+                    ),
+                    const Divider(),
+                    //ProductDescription
+                    TextFormField(
+                      controller: editedProductDescriptionController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        labelText: "Description ",
+                        labelStyle: Theme.of(context).textTheme.bodyLarge,
+                        hintText: "Product Description ",
+                        hintStyle: Theme.of(context).textTheme.bodyMedium,
+                        // errorText: "Please enter valid product Description*",
+                        errorStyle:
+                            Theme.of(context).textTheme.bodySmall.copyWith(
+                                  color: Colors.white,
+                                ),
+                      ),
+                      maxLines: 3,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.multiline,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter product Description *';
+                        }
+                        if (value.length < 10) {
+                          return 'Should be at least 10 character long Description *';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        addedProduct = Product(
+                          productId: addedProduct.productId,
+                          isProductFavorite: addedProduct.isProductFavorite,
+                          productTitle: addedProduct.productTitle,
+                          productDescription: value,
+                          productPrice: addedProduct.productPrice,
+                          productImageURL: addedProduct.productImageURL,
+                        );
+                      },
+                    ),
+                    const Divider(),
+                    // Product ImageURL
+                    Row(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: 175,
+                          height: 150,
+                          margin: const EdgeInsets.fromLTRB(0, 10, 10, 10),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 1,
+                            ),
+                          ),
+                          child: editedProductImageURLController.text.isEmpty
+                              ? const Text(
+                                  "Enter Url",
+                                  textAlign: TextAlign.center,
+                                )
+                              : FittedBox(
+                                  child: Image.network(
+                                    editedProductImageURLController.text,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            controller: editedProductImageURLController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              labelText: "ImageURL ",
+                              labelStyle: Theme.of(context).textTheme.bodyLarge,
+                              hintText: "Product ImageURL ",
+                              hintStyle: Theme.of(context).textTheme.bodyMedium,
+                              // errorText: "Please enter valid product ImageURL*",
+                              errorStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  .copyWith(
+                                    color: Colors.white,
+                                  ),
+                            ),
+                            keyboardType: TextInputType.url,
+                            textInputAction: TextInputAction.done,
+                            focusNode: imageUrlFocusNode,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter product ImageURL *';
+                              }
+                              if (!value.startsWith('http') &&
+                                  !value.startsWith('https')) {
+                                return 'Please enter valid \n product ImageURL *';
+                              }
+                              return null;
+                            },
+                            onEditingComplete: () {
+                              setState(() {});
+                            },
+                            onFieldSubmitted: (_) {
+                              addNewProduct();
+                            },
+                            onSaved: (value) {
+                              addedProduct = Product(
+                                productTitle: addedProduct.productTitle,
+                                productDescription:
+                                    addedProduct.productDescription,
+                                productPrice: addedProduct.productPrice,
+                                productImageURL: value,
+                                productId: addedProduct.productId,
+                                isProductFavorite:
+                                    addedProduct.isProductFavorite,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Divider(),
+                  ],
+                ),
               ),
-              const Divider(),
-            ],
-          ),
-        ),
       ),
     );
   }
