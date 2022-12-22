@@ -52,22 +52,24 @@ class Products with ChangeNotifier {
 //   notifyListeners();
 // }
 
-  Future<void> addProduct(Product addedProduct) {
+  Future<void> addProduct(Product addedProduct)  async {
     const url =
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json';
-    return http
-        .post(
-      url,
-      body: json.encode(
-        {
-          'Product Title': addedProduct.productTitle,
-          'Product Description': addedProduct.productDescription,
-          'Product Price': addedProduct.productPrice,
-          'Product ImageURL': addedProduct.productImageURL,
-          'Favorite Product': addedProduct.isProductFavorite,
-        },
-      ),
-    ).then((response) {
+    try {
+      final response = await http
+          .post(
+        url,
+        body: json.encode(
+          {
+            'Product Title': addedProduct.productTitle,
+            'Product Description': addedProduct.productDescription,
+            'Product Price': addedProduct.productPrice,
+            'Product ImageURL': addedProduct.productImageURL,
+            'Favorite Product': addedProduct.isProductFavorite,
+          },
+        ),
+      );
+      // .then((response) {
       final newProduct = Product(
         productId: json.decode(response.body)['Product Id'],
         productTitle: addedProduct.productTitle,
@@ -78,10 +80,19 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       // items.insert(0, newProduct);
       notifyListeners();
-    }).catchError((error) {
+    }
+    catch (error)  {
       print(error);
-      throw error;
-    });
+        throw error;
+
+      // }).catchError((error) {
+      //   print(error);
+      //   throw error;
+      // });
+    }
+
+
+
   }
 
   void updateProduct(String updatingProductID, Product updatingProduct) {

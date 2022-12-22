@@ -36,7 +36,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     'productImageURL': '',
   };
 
-  void addNewProduct() {
+  Future<void> addNewProduct() async {
     final isEditedValidator = formKey.currentState.validate();
     if (!isEditedValidator) {
       return;
@@ -58,11 +58,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
       Navigator.of(context).pop();
     } else {
-      Provider.of<Products>(
-        context,
-        listen: false,
-      ).addProduct(addedProduct).catchError((error) {
-       return showDialog(
+      try {
+        await Provider.of<Products>(
+          context,
+          listen: false,
+        ).addProduct(addedProduct);
+      } catch (error) {
+        await showDialog(
           context: context,
           builder: (context) => AlertDialog(
             shape: const RoundedRectangleBorder(
@@ -75,7 +77,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
               ),
             ),
             alignment: Alignment.center,
-
             title: const Text("An error occurred!"),
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
             content: Text(error.toString()),
@@ -84,7 +85,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
-                  const MaterialStatePropertyAll<Color>(Colors.white),
+                      const MaterialStatePropertyAll<Color>(Colors.white),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -96,27 +97,23 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
-
                 },
                 child: Text(
                   'Okay',
                   style: Theme.of(context).textTheme.bodyMedium.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                 ),
               ),
-
             ],
           ),
         );
-      }).then(
-        (_) {
-          setState(() {
-            isLoading = false;
-          });
-          Navigator.of(context).pop();
-        },
-      );
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.of(context).pop();
+      }
     }
   }
 
