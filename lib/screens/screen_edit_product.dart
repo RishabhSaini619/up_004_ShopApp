@@ -19,6 +19,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final imageUrlFocusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
 
+  bool isInIt = true;
+  bool isLoading = false;
+
   var addedProduct = Product(
     productId: null,
     productTitle: "",
@@ -38,17 +41,35 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (!isEditedValidator) {
       return;
     }
-
     formKey.currentState.save();
+    setState(() {
+      isLoading = true;
+    });
     if (addedProduct.productId != null) {
-      Provider.of<Products>(context, listen: false).updateProduct(
+      Provider.of<Products>(
+        context,
+        listen: false,
+      ).updateProduct(
         addedProduct.productId,
         addedProduct,
       );
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context).pop();
     } else {
-      Provider.of<Products>(context, listen: false).addProduct(addedProduct);
+      Provider.of<Products>(
+        context,
+        listen: false,
+      ).addProduct(addedProduct).then(
+        (_) {
+          setState(() {
+            isLoading = false;
+          });
+          Navigator.of(context).pop();
+        },
+      );
     }
-    Navigator.of(context).pop();
   }
 
   void updateImageUrl() {
@@ -63,7 +84,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  bool isInIt = true;
   @override
   void initState() {
     imageUrlFocusNode.addListener(updateImageUrl);
@@ -133,7 +153,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
             width: 1,
           ),
         ),
-        child: Form(
+        child: isLoading ?Center(
+          child: CircularProgressIndicator(
+            strokeWidth: 1,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ): Form(
           key: formKey,
           child: ListView(
             children: [

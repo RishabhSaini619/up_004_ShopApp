@@ -52,10 +52,10 @@ class Products with ChangeNotifier {
 //   notifyListeners();
 // }
 
-  void addProduct(Product addedProduct) {
+  Future<void> addProduct(Product addedProduct) {
     const url =
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/products.json';
-    http
+    return http
         .post(
       url,
       body: json.encode(
@@ -67,9 +67,7 @@ class Products with ChangeNotifier {
           'Favorite Product': addedProduct.isProductFavorite,
         },
       ),
-    )
-        .then((response) {
-          print(json.decode(response.body)['Product Id']);
+    ).then((response) {
       final newProduct = Product(
         productId: json.decode(response.body)['Product Id'],
         productTitle: addedProduct.productTitle,
