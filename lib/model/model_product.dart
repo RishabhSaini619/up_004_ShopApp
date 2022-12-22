@@ -55,28 +55,32 @@ class Products with ChangeNotifier {
   void addProduct(Product addedProduct) {
     const url =
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/products.json';
-    http.post(
+    http
+        .post(
       url,
       body: json.encode(
         {
-          'productTitle': addedProduct.productTitle,
-          'productDescription': addedProduct.productDescription,
-          'productPrice': addedProduct.productPrice,
-          'productImageURL': addedProduct.productImageURL,
-          'isProductFavorite': addedProduct.isProductFavorite,
+          'Product Title': addedProduct.productTitle,
+          'Product Description': addedProduct.productDescription,
+          'Product Price': addedProduct.productPrice,
+          'Product ImageURL': addedProduct.productImageURL,
+          'Favorite Product': addedProduct.isProductFavorite,
         },
       ),
-    );
-    final newProduct = Product(
-      productId: DateTime.now().toString(),
-      productTitle: addedProduct.productTitle,
-      productDescription: addedProduct.productDescription,
-      productPrice: addedProduct.productPrice,
-      productImageURL: addedProduct.productImageURL,
-    );
-    _items.add(newProduct);
-    // items.insert(0, newProduct);
-    notifyListeners();
+    )
+        .then((response) {
+          print(json.decode(response.body)['Product Id']);
+      final newProduct = Product(
+        productId: json.decode(response.body)['Product Id'],
+        productTitle: addedProduct.productTitle,
+        productDescription: addedProduct.productDescription,
+        productPrice: addedProduct.productPrice,
+        productImageURL: addedProduct.productImageURL,
+      );
+      _items.add(newProduct);
+      // items.insert(0, newProduct);
+      notifyListeners();
+    });
   }
 
   void updateProduct(String updatingProductID, Product updatingProduct) {
