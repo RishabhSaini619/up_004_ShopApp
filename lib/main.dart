@@ -14,8 +14,12 @@ import 'screens/screen_cart.dart';
 import 'screens/screen_manage_products.dart';
 
 
-void main() {
-  runApp(const MyApp());
+void main() { WidgetsFlutterBinding.ensureInitialized();
+SystemChrome.setPreferredOrientations([
+  DeviceOrientation.portraitUp,
+  DeviceOrientation.portraitDown,
+]);
+runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

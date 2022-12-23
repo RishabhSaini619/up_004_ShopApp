@@ -4,7 +4,7 @@ import 'model_product.dart';
   Product(
     productId: 'p1',
     productTitle: 'Shirt',
-    productDescription: 'A red shirt. It is pretty red!',
+    productDescription: 'A Limited edition red shirt.',
     productPrice: 299.99,
     productImageURL:
     'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',

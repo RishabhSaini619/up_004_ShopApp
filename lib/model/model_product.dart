@@ -52,12 +52,22 @@ class Products with ChangeNotifier {
 //   notifyListeners();
 // }
 
-  Future<void> addProduct(Product addedProduct)  async {
+  Future<void> fetchProducts() async {
     const url =
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json';
     try {
-      final response = await http
-          .post(
+      final response = await http.get(url);
+      print(jsonDecode(response.body));
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<void> addProduct(Product addedProduct) async {
+    const url =
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json';
+    try {
+      final response = await http.post(
         url,
         body: json.encode(
           {
@@ -80,19 +90,15 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       // items.insert(0, newProduct);
       notifyListeners();
-    }
-    catch (error)  {
+    } catch (error) {
       print(error);
-        throw error;
+      throw error;
 
       // }).catchError((error) {
       //   print(error);
       //   throw error;
       // });
     }
-
-
-
   }
 
   void updateProduct(String updatingProductID, Product updatingProduct) {
@@ -107,9 +113,7 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(
-    String deletingProductID,
-  ) {
+  void deleteProduct(String deletingProductID) {
     _items.removeWhere((element) => element.productId == deletingProductID);
     notifyListeners();
   }
