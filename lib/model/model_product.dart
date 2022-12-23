@@ -144,8 +144,20 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String deletingProductID) {
-    _items.removeWhere((element) => element.productId == deletingProductID);
+  Future<void> deleteProduct(String deletingProductID) async {
+    final url =
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$deletingProductID.json';
+    final existingProductIndex =
+        _items.indexWhere((element) => element.productId == deletingProductID);
+    var existingProduct = _items[existingProductIndex];
+
+    http.delete(url).then((value) {
+      existingProduct = null;
+    }).catchError((error) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+    });
+    _items.removeAt(existingProductIndex);
     notifyListeners();
   }
 
