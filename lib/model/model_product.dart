@@ -27,7 +27,7 @@ class Product with ChangeNotifier {
 }
 
 class Products with ChangeNotifier {
-  final List<Product> _items = basicProductData;
+  List<Product> _items = basicProductData;
 
 // var _showFavoritesOnly = false;
 
@@ -57,7 +57,23 @@ class Products with ChangeNotifier {
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json';
     try {
       final response = await http.get(url);
-      print(jsonDecode(response.body));
+      final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
+      final List<Product> extractedProductList = [];
+      extractedData.forEach((extractedProductID, extractedProductData) {
+        extractedProductList.add(
+          Product(
+            productId: extractedProductID,
+            productTitle: extractedProductData['Product Title'],
+            productDescription: extractedProductData['Product Description'],
+            productPrice: extractedProductData['Product Price'],
+            productImageURL: extractedProductData['Product ImageURL'],
+            isProductFavorite: extractedProductData['Favorite Product'],
+          ),
+        );
+      });
+
+      _items = extractedProductList;
+      notifyListeners();
     } catch (error) {
       throw (error);
     }

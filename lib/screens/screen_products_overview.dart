@@ -24,6 +24,7 @@ class ProductsOverviewScreen extends StatefulWidget {
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showFavoritesOnly = false;
   var _init = true;
+  bool _isExtracting = false;
 
   @override
   void initState() {
@@ -37,9 +38,17 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   void didChangeDependencies() {
     if (_init) {
-      Provider.of<Products>(context).fetchProducts();
+      setState(() {
+        _isExtracting = true;
+      });
+      Provider.of<Products>(context).fetchProducts().then((_) {
+        setState(() {
+          _isExtracting = false;
+        });
+      });
     }
     _init = false;
+
     super.didChangeDependencies();
   }
 
@@ -96,7 +105,14 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductGridWidget(_showFavoritesOnly),
+      body: _isExtracting
+          ? Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 3,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      )
+          : ProductGridWidget(_showFavoritesOnly),
     );
   }
 }
