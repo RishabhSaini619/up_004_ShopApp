@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:up_004_shopapp/model/model_orders.dart';
+import '../model/model_orders.dart';
+import '../widgets/widget_app_drawer.dart';
 import '../widgets/widget_cart_item.dart';
 import '../model/model_cart.dart' show Cart;
 
@@ -15,6 +16,7 @@ class CartScreen extends StatelessWidget {
         title: const Text("Cart"),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
       ),
+      drawer: AppDrawer(),
       body: Column(
         children: [
           Expanded(
@@ -57,40 +59,73 @@ class CartScreen extends StatelessWidget {
                         Theme.of(context).colorScheme.primary.withOpacity(0.5),
                   ),
                   const Spacer(),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          const MaterialStatePropertyAll<Color>(Colors.white),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                    onPressed: () {
-                      Provider.of<Orders>(context, listen: false).addOrder(
-                        cart.items.values.toList(),
-                        cart.totalAmount,
-                      );
-                      cart.clearCartItem();
-                    },
-                    child: Text(
-                      'Order',
-                      style: Theme.of(context).textTheme.bodyLarge.copyWith(
-                            fontSize: 20,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                    ),
-                  ),
+                  OrderButtonWidget(cart: cart),
                 ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class OrderButtonWidget extends StatefulWidget {
+  const OrderButtonWidget({
+    Key key,
+    @required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+
+  @override
+  State<OrderButtonWidget> createState() => _OrderButtonWidgetState();
+}
+
+class _OrderButtonWidgetState extends State<OrderButtonWidget> {
+  bool _isOrderLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: const MaterialStatePropertyAll<Color>(Colors.white),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+      ),
+      onPressed: (widget.cart.totalAmount <= 0 || _isOrderLoading)
+          ? null
+          : () async {
+              setState(() {
+                _isOrderLoading = true;
+              });
+              await Provider.of<Orders>(context, listen: false).addOrder(
+                widget.cart.items.values.toList(),
+                widget.cart.totalAmount,
+              );
+              setState(() {
+                _isOrderLoading = false;
+              });
+              widget.cart.clearCartItem();
+            },
+      child: _isOrderLoading
+          ? CircularProgressIndicator(
+              strokeWidth: 3,
+              color: Theme.of(context).colorScheme.primary,
+            )
+          : Text(
+              'Order',
+              style: Theme.of(context).textTheme.bodyLarge.copyWith(
+                    fontSize: 20,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
     );
   }
 }

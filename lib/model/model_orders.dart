@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-
+import 'package:http/http.dart' as http;
 import 'model_cart.dart';
 
 class OrderItem {
@@ -22,16 +23,34 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  addOrder(List<CartItem> cartProducts, double cartAmount) {
+  Future<void> addOrder(List<CartItem> cartProducts, double cartAmount) async {
+    const url =
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Order-List .json';
+    final currentTimeStamp = DateTime.now();
+
+    final response = await http.post(
+      url,
+      body: json.encode({
+        'Order Amount': cartAmount,
+        'Order Date': currentTimeStamp.toIso8601String(),
+        'Order Products': cartProducts
+            .map((cp) => {
+                  'Product Id': cp.cartItemId,
+                  'Product Title': cp.cartItemTitle,
+                  'Product Quantity': cp.cartItemQuantity,
+                  'Product Price': cp.cartItemPrice,
+                })
+            .toList(),
+      }),
+    );
     _orders.insert(
       0,
       OrderItem(
-        orderItemId: DateTime.now().toString(),
+        orderItemId: json.decode(response.body)['Order Id'],
         orderItemAmount: cartAmount,
         orderItemProducts: cartProducts,
-        orderItemDate: DateTime.now(),
+        orderItemDate: currentTimeStamp,
       ),
-
     );
     notifyListeners();
   }

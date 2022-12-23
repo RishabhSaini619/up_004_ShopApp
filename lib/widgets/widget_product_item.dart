@@ -48,7 +48,7 @@ class ProductItemWidget extends StatelessWidget {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    shape:  RoundedRectangleBorder(
+                    shape:  const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(30),
                         ),),
