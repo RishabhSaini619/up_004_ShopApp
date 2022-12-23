@@ -8,6 +8,13 @@ import '../widgets/widget_manage_products_item.dart';
 class ManageProductsScreen extends StatelessWidget {
   static const routeName = '/ManageProductsScreen';
 
+  Future<void> refreshingProducts(BuildContext context) async {
+    await Provider.of<Products>(
+      context,
+      listen: false,
+    ).fetchProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
@@ -28,21 +35,24 @@ class ManageProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView.builder(
-          itemCount: productsData.items.length,
-          itemBuilder: (context, index) => Column(
-            children: [
-              ManageProductsItemWidget(
-                productsData.items[index].productId,
-                productsData.items[index].productTitle,
-                productsData.items[index].productDescription,
-                productsData.items[index].productPrice,
-                productsData.items[index].productImageURL,
-              ),
-              const Divider(),
-            ],
+      body: RefreshIndicator(
+        onRefresh: () => refreshingProducts(context),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: ListView.builder(
+            itemCount: productsData.items.length,
+            itemBuilder: (context, index) => Column(
+              children: [
+                ManageProductsItemWidget(
+                  productsData.items[index].productId,
+                  productsData.items[index].productTitle,
+                  productsData.items[index].productDescription,
+                  productsData.items[index].productPrice,
+                  productsData.items[index].productImageURL,
+                ),
+                const Divider(),
+              ],
+            ),
           ),
         ),
       ),
