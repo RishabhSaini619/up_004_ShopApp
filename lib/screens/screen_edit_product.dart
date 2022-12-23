@@ -46,7 +46,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       isLoading = true;
     });
     if (addedProduct.productId != null) {
-      Provider.of<Products>(
+      await Provider.of<Products>(
         context,
         listen: false,
       ).updateProduct(
@@ -115,6 +115,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         Navigator.of(context).pop();
       }
     }
+
   }
 
   void updateImageUrl() {
@@ -145,7 +146,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
             .findById(editingProductID);
 
         addedProduct = editingProduct;
-
         editedProductTitleController.text = editingProduct.productTitle;
         editedProductDescriptionController.text =
             editingProduct.productDescription;

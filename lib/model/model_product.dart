@@ -117,11 +117,26 @@ class Products with ChangeNotifier {
     }
   }
 
-  void updateProduct(String updatingProductID, Product updatingProduct) {
+  Future<void> updateProduct(
+      String updatingProductID, Product updatingProduct) async {
     final updateProductIndex = _items.indexWhere((element) {
       return element.productId == updatingProductID;
     });
     if (updateProductIndex >= 0) {
+      final url =
+          'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$updatingProductID.json';
+      await http.patch(
+        url,
+        body: json.encode(
+          {
+            'Product Title': updatingProduct.productTitle,
+            'Product Description': updatingProduct.productDescription,
+            'Product Price': updatingProduct.productPrice,
+            'Product ImageURL': updatingProduct.productImageURL,
+            'Favorite Product': updatingProduct.isProductFavorite,
+          },
+        ),
+      );
       _items[updateProductIndex] = updatingProduct;
       notifyListeners();
     } else {
