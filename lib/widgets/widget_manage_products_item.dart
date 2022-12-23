@@ -20,6 +20,7 @@ class ManageProductsItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldMessenger =  ScaffoldMessenger.of(context);
     return Container(
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(5),
@@ -63,9 +64,29 @@ class ManageProductsItemWidget extends StatelessWidget {
                   Icons.delete_forever_sharp,
                   color: Theme.of(context).errorColor,
                 ),
-                onPressed: () {
-                  Provider.of<Products>(context,listen: false).deleteProduct(manageProductsItemWidgetId);
-
+                onPressed: () async {
+                  try {
+                    Provider.of<Products>(context, listen: false)
+                        .deleteProduct(manageProductsItemWidgetId);
+                  } catch (error) {
+                    scaffoldMessenger.showSnackBar(
+                      SnackBar(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(30),
+                          ),
+                        ),
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.5),
+                        content: Text(
+                          'Deleting Failed',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    );
+                  }
                 },
               ),
             ],

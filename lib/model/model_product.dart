@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
+import '../model/model_http_exception.dart';
 import '../model/model_basic_data.dart';
 import 'package:http/http.dart' as http;
 
@@ -150,15 +151,15 @@ class Products with ChangeNotifier {
     final existingProductIndex =
         _items.indexWhere((element) => element.productId == deletingProductID);
     var existingProduct = _items[existingProductIndex];
-
-    http.delete(url).then((value) {
-      existingProduct = null;
-    }).catchError((error) {
-      _items.insert(existingProductIndex, existingProduct);
-      notifyListeners();
-    });
+    final response = await http.delete(url);
     _items.removeAt(existingProductIndex);
     notifyListeners();
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw HttpException("Could mot delete product.");
+    }
+    existingProduct = null;
   }
 
   Product findById(String id) {
