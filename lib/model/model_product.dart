@@ -21,9 +21,34 @@ class Product with ChangeNotifier {
     @required this.productImageURL,
     this.isProductFavorite = false,
   });
-  void toggleFavoriteStatus() {
+
+  void _setFavValue (bool newValue) {
+    isProductFavorite =newValue;
+    notifyListeners();
+  }
+
+
+  Future<void> toggleFavoriteStatus() async {
+    final oldStatus = isProductFavorite;
     isProductFavorite = !isProductFavorite;
     notifyListeners();
+    final url =
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$productId.json';
+    try {
+     final response = await http.patch(
+        url,
+        body: json.encode(
+          {
+            'Favorite Product': isProductFavorite,
+          },
+        ),
+      );
+     if (response.statusCode >= 400) {
+       _setFavValue(oldStatus);
+     }
+    } catch (error) {
+      _setFavValue(oldStatus);
+    }
   }
 }
 

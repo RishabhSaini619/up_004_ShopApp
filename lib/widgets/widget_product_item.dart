@@ -45,6 +45,34 @@ class ProductItemWidget extends StatelessWidget {
               ),
               onPressed: () {
                 product.toggleFavoriteStatus();
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(30),
+                        ),),
+                    backgroundColor:
+                    Colors.deepOrange.withOpacity(0.4),
+                    // Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                    content: Text(
+                      'Item added to Favorite',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                      textAlign: TextAlign.center,
+                    ),
+
+                    duration: const Duration(seconds: 1),
+                    // action: SnackBarAction(
+                    //   label: 'UNDO',
+                    //   textColor: Colors.white,
+                    //   disabledTextColor: Colors.white54,
+                    //   onPressed: () {
+                    //     cart.removeSelectedItem(product.productId);
+                    //   },
+                    // ),
+                  ),
+                );
+
               },
             ),
           ),
