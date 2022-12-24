@@ -22,11 +22,10 @@ class Product with ChangeNotifier {
     this.isProductFavorite = false,
   });
 
-  void _setFavValue (bool newValue) {
-    isProductFavorite =newValue;
+  void _setFavValue(bool newValue) {
+    isProductFavorite = newValue;
     notifyListeners();
   }
-
 
   Future<void> toggleFavoriteStatus() async {
     final oldStatus = isProductFavorite;
@@ -35,7 +34,7 @@ class Product with ChangeNotifier {
     final url =
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$productId.json';
     try {
-     final response = await http.patch(
+      final response = await http.patch(
         url,
         body: json.encode(
           {
@@ -43,9 +42,9 @@ class Product with ChangeNotifier {
           },
         ),
       );
-     if (response.statusCode >= 400) {
-       _setFavValue(oldStatus);
-     }
+      if (response.statusCode >= 400) {
+        _setFavValue(oldStatus);
+      }
     } catch (error) {
       _setFavValue(oldStatus);
     }
@@ -84,6 +83,9 @@ class Products with ChangeNotifier {
     try {
       final response = await http.get(url);
       final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
+      if (extractedData == null) {
+        return;
+      }
       final List<Product> extractedProductList = [];
       extractedData.forEach((extractedProductID, extractedProductData) {
         extractedProductList.add(

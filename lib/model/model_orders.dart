@@ -18,14 +18,45 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
-  final List<OrderItem> _orders = [];
+  List<OrderItem> _orders = [];
   List<OrderItem> get orders {
     return [..._orders];
   }
 
+  Future<void> fetchOrder() async {
+    const url =
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List.json';
+    final response = await http.get(url);
+    final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
+    if (extractedData == null) {
+      return;
+    }
+    final List<OrderItem> extractedOrderList = [];
+    extractedData.forEach((extractedOrderID, extractedOrderData) {
+      extractedOrderList.add(
+        OrderItem(
+          orderItemId: extractedOrderID,
+          orderItemAmount: extractedOrderData['Order Amount'],
+          orderItemProducts:
+              (extractedOrderData['Order Products'] as List<dynamic>).map(
+            (item) => CartItem(
+              item['Product Id'],
+              item['Product Title'],
+              item['Product Price'],
+              item['Product Quantity'],
+            ),
+          ),
+          orderItemDate: DateTime.parse(extractedOrderData['Order Date']),
+        ),
+      );
+    });
+    _orders = extractedOrderList.reversed.toList();
+    notifyListeners();
+  }
+
   Future<void> addOrder(List<CartItem> cartProducts, double cartAmount) async {
     const url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Order-List .json';
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List .json';
     final currentTimeStamp = DateTime.now();
 
     final response = await http.post(

@@ -107,11 +107,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       drawer: AppDrawer(),
       body: _isExtracting
           ? Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 3,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-      )
+              child: CircularProgressIndicator(
+                strokeWidth: 3,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            )
           : ProductGridWidget(_showFavoritesOnly),
     );
   }
