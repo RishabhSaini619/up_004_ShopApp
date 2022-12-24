@@ -1,8 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../model/model_orders.dart';
+import '../models_&_providers/model_orders.dart';
 import '../widgets/widget_app_drawer.dart';
 import '../widgets/widget_order_item.dart';
 
@@ -16,7 +15,7 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   Future _ordersFuture;
   Future _obtainOrdersFuture() {
-    _ordersFuture = Provider.of<Orders>(context, listen: false).fetchOrder();
+   return _ordersFuture = Provider.of<Orders>(context, listen: false).fetchOrder();
   }
   @override
   void initState() {

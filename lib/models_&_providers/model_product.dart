@@ -1,9 +1,11 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
-import '../model/model_http_exception.dart';
-import '../model/model_basic_data.dart';
 import 'package:http/http.dart' as http;
+
+import 'model_http_exception.dart';
 
 class Product with ChangeNotifier {
   final String productId;
@@ -52,7 +54,7 @@ class Product with ChangeNotifier {
 }
 
 class Products with ChangeNotifier {
-  List<Product> _items = basicProductData;
+  List<Product> _items =[];
 
 // var _showFavoritesOnly = false;
 
@@ -103,7 +105,7 @@ class Products with ChangeNotifier {
       _items = extractedProductList;
       notifyListeners();
     } catch (error) {
-      throw (error);
+      rethrow;
     }
   }
 
@@ -135,8 +137,7 @@ class Products with ChangeNotifier {
       // items.insert(0, newProduct);
       notifyListeners();
     } catch (error) {
-      print(error);
-      throw error;
+      rethrow;
 
       // }).catchError((error) {
       //   print(error);
@@ -168,7 +169,7 @@ class Products with ChangeNotifier {
       _items[updateProductIndex] = updatingProduct;
       notifyListeners();
     } else {
-      print("Invalid updateProductIndex");
+      return;
     }
   }
 

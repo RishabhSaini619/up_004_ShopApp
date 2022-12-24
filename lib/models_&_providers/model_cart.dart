@@ -27,18 +27,18 @@ class Cart with ChangeNotifier {
       _items.update(
           productId,
           (existingCartItem) => CartItem(
-              existingCartItem.cartItemId,
-              existingCartItem.cartItemTitle,
-              existingCartItem.cartItemQuantity + 1,
-              existingCartItem.cartItemPrice));
+              cartItemId : existingCartItem.cartItemId,
+              cartItemTitle : existingCartItem.cartItemTitle,
+              cartItemQuantity : existingCartItem.cartItemQuantity + 1,
+              cartItemPrice : existingCartItem.cartItemPrice));
     } else {
       _items.putIfAbsent(
         productId,
         () => CartItem(
-          DateTime.now().toString(),
-          productTitle,
-          1,
-          productPrice,
+          cartItemId : DateTime.now().toString(),
+          cartItemTitle :  productTitle,
+          cartItemQuantity : 1,
+          cartItemPrice : productPrice,
         ),
       );
     }
@@ -60,10 +60,10 @@ class Cart with ChangeNotifier {
       _items.update(
         productId,
         (existingCartItem) => CartItem(
-          existingCartItem.cartItemId,
-          existingCartItem.cartItemTitle,
-          existingCartItem.cartItemQuantity - 1,
-          existingCartItem.cartItemPrice,
+          cartItemId : existingCartItem.cartItemId,
+          cartItemTitle : existingCartItem.cartItemTitle,
+          cartItemQuantity : existingCartItem.cartItemQuantity - 1,
+          cartItemPrice :existingCartItem.cartItemPrice,
         ),
       );
     } else {
@@ -84,10 +84,10 @@ class CartItem {
   final int cartItemQuantity;
   final double cartItemPrice;
 
-  CartItem(
+  CartItem({
     @required this.cartItemId,
     @required this.cartItemTitle,
     @required this.cartItemQuantity,
     @required this.cartItemPrice,
-  );
+  });
 }

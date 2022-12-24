@@ -1,7 +1,9 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:up_004_shopapp/screens/screen_edit_product.dart';
-import '../model/model_product.dart';
+import '../models_&_providers/model_product.dart';
 import '../widgets/widget_app_drawer.dart';
 import '../widgets/widget_manage_products_item.dart';
 

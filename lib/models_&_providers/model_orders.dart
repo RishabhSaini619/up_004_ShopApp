@@ -32,7 +32,10 @@ class Orders with ChangeNotifier {
     if (extractedData == null) {
       return;
     }
-    extractedData.forEach((extractedOrderID, extractedOrderData) {
+    extractedData.forEach((
+      extractedOrderID,
+      extractedOrderData,
+    ) {
       extractedOrderList.add(
         OrderItem(
           orderItemId: extractedOrderID,
@@ -42,10 +45,10 @@ class Orders with ChangeNotifier {
               (extractedOrderData['Order Products'] as List<dynamic>)
                   .map(
                     (item) => CartItem(
-                      item['Product Id'],
-                      item['Product Title'],
-                      item['Product Price'],
-                      item['Product Quantity'],
+                      cartItemId: item['Product Id'],
+                      cartItemTitle:  item['Product Title'],
+                      cartItemPrice: item['Product Price'],
+                      cartItemQuantity: item['Product Quantity'],
                     ),
                   )
                   .toList(),
@@ -58,7 +61,7 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> cartProducts, double cartAmount) async {
     const url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List .json';
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List.json';
     final currentTimeStamp = DateTime.now();
     final response = await http.post(
       url,
@@ -78,7 +81,7 @@ class Orders with ChangeNotifier {
     _orders.insert(
       0,
       OrderItem(
-        orderItemId: json.decode(response.body)['Order Id'],
+        orderItemId: json.decode(response.body)['Order Name'],
         orderItemAmount: cartAmount,
         orderItemProducts: cartProducts,
         orderItemDate: currentTimeStamp,

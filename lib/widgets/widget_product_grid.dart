@@ -1,6 +1,8 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../model/model_product.dart';
+import '../models_&_providers/model_product.dart';
 import 'widget_product_item.dart';
 
 class ProductGridWidget extends StatelessWidget {

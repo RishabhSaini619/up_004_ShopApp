@@ -3,23 +3,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:up_004_shopapp/screens/screen_edit_product.dart';
-import 'model/model_product.dart';
+
+import 'models_&_providers/model_cart.dart';
+import 'models_&_providers/model_orders.dart';
+import 'models_&_providers/model_product.dart';
+
+import 'screens/screen_edit_product.dart';
 import 'screens/screen_orders.dart';
 import 'screens/screen_product_detail.dart';
 import 'screens/screen_products_overview.dart';
-import 'model/model_orders.dart';
-import 'model/model_cart.dart';
 import 'screens/screen_cart.dart';
 import 'screens/screen_manage_products.dart';
 
-
-void main() { WidgetsFlutterBinding.ensureInitialized();
-SystemChrome.setPreferredOrientations([
-  DeviceOrientation.portraitUp,
-  DeviceOrientation.portraitDown,
-]);
-runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -114,15 +116,15 @@ class MyApp extends StatelessWidget {
             systemOverlayStyle: SystemUiOverlayStyle.light,
           ),
         ),
-        home:  const ProductsOverviewScreen(),
+        home: const ProductsOverviewScreen(),
         routes: {
-          ProductsOverviewScreen.routeName: (ctx) => const ProductsOverviewScreen(),
+          ProductsOverviewScreen.routeName: (ctx) =>
+              const ProductsOverviewScreen(),
           ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
           OrdersScreen.routeName: (ctx) => OrdersScreen(),
           ManageProductsScreen.routeName: (ctx) => ManageProductsScreen(),
           EditProductScreen.routeName: (ctx) => EditProductScreen(),
-
         },
       ),
     );
