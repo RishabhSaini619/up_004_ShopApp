@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/model_orders.dart';
@@ -12,44 +14,56 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  bool _isExtracting = false;
-
+  Future _ordersFuture;
+  Future _obtainOrdersFuture() {
+    _ordersFuture = Provider.of<Orders>(context, listen: false).fetchOrder();
+  }
   @override
   void initState() {
-    Future.delayed(Duration.zero).then((value) async {
-      setState(() {
-        _isExtracting = true;
-      });
-      await Provider.of<Orders>(context, listen: false).fetchOrder();
-      setState(() {
-        _isExtracting = false;
-      });
-    });
+    _ordersFuture = _obtainOrdersFuture();
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
-    final ordersData = Provider.of<Orders>(context);
+    print('building orders');
+    // final ordersData = Provider.of<Orders>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Orders"),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
       ),
       drawer: AppDrawer(),
-      body: _isExtracting
-          ? Center(
+      body: FutureBuilder(
+        future: _ordersFuture,
+        builder: (context, dataSnapshot) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(
               child: CircularProgressIndicator(
                 strokeWidth: 3,
                 color: Theme.of(context).colorScheme.primary,
               ),
-            )
-          : ListView.builder(
-              itemCount: ordersData.orders.length,
-              itemBuilder: (context, index) => OrderItemWidget(
-                ordersData.orders[index],
-              ),
-            ),
+            );
+          } else {
+            if (dataSnapshot.error != null) {
+              return Center(
+                child: Text(
+                  'An error occurred!',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              );
+            } else {
+              return Consumer<Orders>(
+                builder: (ctx, ordersData, child) => ListView.builder(
+                  itemCount: ordersData.orders.length,
+                  itemBuilder: (context, index) => OrderItemWidget(
+                    ordersData.orders[index],
+                  ),
+                ),
+              );
+            }
+          }
+        },
+      ),
     );
   }
 }

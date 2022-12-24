@@ -27,26 +27,28 @@ class Orders with ChangeNotifier {
     const url =
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List.json';
     final response = await http.get(url);
+    final List<OrderItem> extractedOrderList = [];
     final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
       return;
     }
-    final List<OrderItem> extractedOrderList = [];
     extractedData.forEach((extractedOrderID, extractedOrderData) {
       extractedOrderList.add(
         OrderItem(
           orderItemId: extractedOrderID,
           orderItemAmount: extractedOrderData['Order Amount'],
-          orderItemProducts:
-              (extractedOrderData['Order Products'] as List<dynamic>).map(
-            (item) => CartItem(
-              item['Product Id'],
-              item['Product Title'],
-              item['Product Price'],
-              item['Product Quantity'],
-            ),
-          ),
           orderItemDate: DateTime.parse(extractedOrderData['Order Date']),
+          orderItemProducts:
+              (extractedOrderData['Order Products'] as List<dynamic>)
+                  .map(
+                    (item) => CartItem(
+                      item['Product Id'],
+                      item['Product Title'],
+                      item['Product Price'],
+                      item['Product Quantity'],
+                    ),
+                  )
+                  .toList(),
         ),
       );
     });
@@ -58,7 +60,6 @@ class Orders with ChangeNotifier {
     const url =
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List .json';
     final currentTimeStamp = DateTime.now();
-
     final response = await http.post(
       url,
       body: json.encode({
