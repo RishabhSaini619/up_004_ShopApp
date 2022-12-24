@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:up_004_shopapp/screens/screen_authentication%20.dart';
 
 import 'models_&_providers/model_cart.dart';
 import 'models_&_providers/model_orders.dart';
@@ -116,8 +117,9 @@ class MyApp extends StatelessWidget {
             systemOverlayStyle: SystemUiOverlayStyle.light,
           ),
         ),
-        home: const ProductsOverviewScreen(),
+        home: AuthenticationScreen(),
         routes: {
+          AuthenticationScreen.routeName: (ctx) => AuthenticationScreen(),
           ProductsOverviewScreen.routeName: (ctx) =>
               const ProductsOverviewScreen(),
           ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
