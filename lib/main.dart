@@ -3,18 +3,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:up_004_shopapp/screens/screen_authentication%20.dart';
 
+import 'models_&_providers/model_authentication.dart';
 import 'models_&_providers/model_cart.dart';
 import 'models_&_providers/model_orders.dart';
 import 'models_&_providers/model_product.dart';
 
+import 'screens/screen_authentication .dart';
+import 'screens/screen_cart.dart';
 import 'screens/screen_edit_product.dart';
+import 'screens/screen_manage_products.dart';
 import 'screens/screen_orders.dart';
 import 'screens/screen_product_detail.dart';
 import 'screens/screen_products_overview.dart';
-import 'screens/screen_cart.dart';
-import 'screens/screen_manage_products.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => Authentication(),
+        ),
         ChangeNotifierProvider(
           create: (ctx) => Products(),
         ),

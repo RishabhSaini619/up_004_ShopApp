@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:up_004_shopapp/models_&_providers/model_authentication.dart';
 
 enum AuthenticationMode { signUp, logIn }
 
@@ -13,14 +15,14 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthenticationMode _authenticationMode = AuthenticationMode.logIn;
   final Map<String, String> _authenticationData = {
-    'name': '',
     'email': '',
+    // 'name': '',
     'password': '',
   };
   var _isLoading = false;
   var obscureTextData = false;
   final _passwordController = TextEditingController();
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
       return;
@@ -33,6 +35,13 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       // Log user in
     } else {
       // Sign user up
+     await Provider.of<Authentication>(
+        context,
+        listen: false,
+      ).userRegister(
+        _authenticationData['email'],
+        _authenticationData['password'],
+      );
     }
     setState(() {
       _isLoading = false;
@@ -94,59 +103,22 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
               ),
               Container(
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(45),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.primary,
-                    width: 1,
-                  ),
-                ),
-                height: deviceSize.height * 0.4,
-                width: deviceSize.width * 0.9,
-                padding: const EdgeInsets.all(20),
+                // decoration: BoxDecoration(
+                //   shape: BoxShape.rectangle,
+                //   borderRadius: BorderRadius.circular(45),
+                // border: Border.all(
+                //   color: Theme.of(context).colorScheme.primary,
+                //   width: 0,
+                // ),
+                // ),
+                height: deviceSize.height * 0.5,
+                width: deviceSize.width * 0.8,
+                padding: const EdgeInsets.all(30),
                 child: Form(
                   key: _formKey,
                   child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
-                        if (_authenticationMode == AuthenticationMode.signUp)
-                          TextFormField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                              icon: Icon(
-                                Icons.person,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              labelText: "Name",
-                              labelStyle: Theme.of(context).textTheme.bodyLarge,
-                              hintText: "User Name",
-                              hintStyle: Theme.of(context).textTheme.bodyMedium,
-                              errorStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  .copyWith(
-                                    color: Colors.white,
-                                  ),
-                            ),
-                            keyboardType: TextInputType.text,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Please enter user name *';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              _authenticationData['name'] = value;
-                            },
-                          ),
-                        if (_authenticationMode == AuthenticationMode.signUp)
-                          const Divider(),
                         TextFormField(
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -169,17 +141,54 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                     ),
                           ),
                           keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value.isEmpty || !value.contains('@')) {
+                          validator: (email) {
+                            if (email.isEmpty || !email.contains('@')) {
                               return 'Invalid email!';
                             }
                             return null;
                           },
-                          onSaved: (value) {
-                            _authenticationData['email'] = value;
+                          onSaved: (email) {
+                            _authenticationData['email'] = email;
                           },
                         ),
                         const Divider(),
+                        // if (_authenticationMode == AuthenticationMode.signUp)
+                        //   TextFormField(
+                        //     decoration: InputDecoration(
+                        //       border: OutlineInputBorder(
+                        //         borderRadius: BorderRadius.circular(15),
+                        //         borderSide: BorderSide(
+                        //           color: Theme.of(context).colorScheme.primary,
+                        //         ),
+                        //       ),
+                        //       icon: Icon(
+                        //         Icons.person,
+                        //         color: Theme.of(context).colorScheme.primary,
+                        //       ),
+                        //       labelText: "Name",
+                        //       labelStyle: Theme.of(context).textTheme.bodyLarge,
+                        //       hintText: "User Name",
+                        //       hintStyle: Theme.of(context).textTheme.bodyMedium,
+                        //       errorStyle: Theme.of(context)
+                        //           .textTheme
+                        //           .bodySmall
+                        //           .copyWith(
+                        //         color: Colors.white,
+                        //       ),
+                        //     ),
+                        //     keyboardType: TextInputType.text,
+                        //     validator: (name) {
+                        //       if (name.isEmpty) {
+                        //         return 'Please enter user name *';
+                        //       }
+                        //       return null;
+                        //     },
+                        //     onSaved: (name) {
+                        //       _authenticationData['name'] = name;
+                        //     },
+                        //   ),
+                        // if (_authenticationMode == AuthenticationMode.signUp)
+                        //   const Divider(),
                         TextFormField(
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -218,17 +227,18 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                           ),
                           obscureText: obscureTextData,
                           controller: _passwordController,
-                          validator: (value) {
-                            if (value.isEmpty || value.length < 5) {
+                          validator: (pass) {
+                            if (pass.isEmpty || pass.length < 5) {
                               return ('Password is too short!');
                             }
                             return null;
                           },
-                          onSaved: (value) {
-                            _authenticationData['password'] = value;
+                          onSaved: (pass) {
+                            _authenticationData['password'] = pass;
                           },
                         ),
-                        const Divider(),
+                        if (_authenticationMode == AuthenticationMode.signUp)
+                          const Divider(),
                         if (_authenticationMode == AuthenticationMode.signUp)
                           TextFormField(
                             enabled: _authenticationMode ==
@@ -274,8 +284,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                             // controller: _passwordController,
                             validator:
                                 _authenticationMode == AuthenticationMode.signUp
-                                    ? (value) {
-                                        if (value != _passwordController.text) {
+                                    ? (cpass) {
+                                        if (cpass != _passwordController.text) {
                                           'Passwords do not match!';
                                         }
                                         return;
@@ -292,7 +302,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   if (_isLoading)
-                    const CircularProgressIndicator()
+                    CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
                   else
                     ElevatedButton(
                       style: ButtonStyle(
@@ -304,21 +317,25 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
+                        minimumSize: MaterialStateProperty.all(
+                          Size(
+                            deviceSize.width * 0.8,
+                            40,
+                          ),
+                        ),
                       ),
                       onPressed: _submit,
                       child: Text(
                         _authenticationMode == AuthenticationMode.logIn
                             ? 'LOGIN'
-                            : 'SIGN UP',
+                            : 'REGISTER',
                         // style: Theme.of(context).textTheme.bodyLarge,
                         style: Theme.of(context).textTheme.bodyLarge.copyWith(
                               fontSize: 20,
                             ),
                       ),
                     ),
-                  SizedBox(
-                    height: deviceSize.height * 0.03,
-                  ),
+                  const SizedBox(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -331,7 +348,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                       ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll<Color>(
-                            Theme.of(context).colorScheme.background,
+                            Theme.of(context)
+                                .colorScheme
+                                .background
+                                .withOpacity(0.1),
                           ),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -346,7 +366,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                         onPressed: _switchAuthenticationMode,
                         child: Text(
                           _authenticationMode == AuthenticationMode.logIn
-                              ? 'SignUp'
+                              ? 'Register'
                               : 'LogIn',
                           style: Theme.of(context)
                               .textTheme
