@@ -32,7 +32,14 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       _isLoading = true;
     });
     if (_authenticationMode == AuthenticationMode.logIn) {
-      // Log user in
+      // Log user in userLogIn
+      await Provider.of<Authentication>(
+        context,
+        listen: false,
+      ).userLogIn(
+        _authenticationData['email'],
+        _authenticationData['password'],
+      );
     } else {
       // Sign user up
      await Provider.of<Authentication>(
