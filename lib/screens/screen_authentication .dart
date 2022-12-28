@@ -1,6 +1,9 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:up_004_shopapp/models_&_providers/model_authentication.dart';
+import 'package:up_004_shopapp/models_&_providers/model_http_exception.dart';
 
 enum AuthenticationMode { signUp, logIn }
 
@@ -22,6 +25,54 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   var _isLoading = false;
   var obscureTextData = false;
   final _passwordController = TextEditingController();
+
+  void _showErrorDialog(String errorMeaasge) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        alignment: Alignment.center,
+        title: const Text("An error occurred!"),
+        titleTextStyle: Theme.of(context).textTheme.titleLarge,
+        content: Text(errorMeaasge),
+        contentTextStyle: Theme.of(context).textTheme.bodyMedium,
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(
+            color: Color(0xffff5722),
+            width: 1,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  const MaterialStatePropertyAll<Color>(Colors.white),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Okay',
+              style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
@@ -31,25 +82,45 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     setState(() {
       _isLoading = true;
     });
-    if (_authenticationMode == AuthenticationMode.logIn) {
-      // Log user in userLogIn
-      await Provider.of<Authentication>(
-        context,
-        listen: false,
-      ).userLogIn(
-        _authenticationData['email'],
-        _authenticationData['password'],
-      );
-    } else {
-      // Sign user up
-     await Provider.of<Authentication>(
-        context,
-        listen: false,
-      ).userRegister(
-        _authenticationData['email'],
-        _authenticationData['password'],
-      );
+    try {
+      if (_authenticationMode == AuthenticationMode.logIn) {
+        // Log user in userLogIn
+        await Provider.of<Authentication>(
+          context,
+          listen: false,
+        ).userLogIn(
+          _authenticationData['email'],
+          _authenticationData['password'],
+        );
+      } else {
+        // Sign user up
+        await Provider.of<Authentication>(
+          context,
+          listen: false,
+        ).userRegister(
+          _authenticationData['email'],
+          _authenticationData['password'],
+        );
+      }
+    } on HttpException catch (error) {
+      var errorMessage = "Authentication Failed.";
+      if (error.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = "Email already exists";
+      } else if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = "Email is invalid";
+      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
+        errorMessage = "Email is not found";
+      } else if (error.toString().contains('WEEK_PASSWORD')) {
+        errorMessage = "Password is week";
+      } else if (error.toString().contains('INVALID_PASSWORD')) {
+        errorMessage = "Password is invalid";
+      }
+      _showErrorDialog(errorMessage);
+    } catch (error) {
+      const errorMessage = "Could not authentication. Please try again later";
+      _showErrorDialog(errorMessage);
     }
+
     setState(() {
       _isLoading = false;
     });

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'model_http_exception.dart';
 
 class Authentication with ChangeNotifier {
   String authenticationToken;
@@ -20,17 +21,24 @@ class Authentication with ChangeNotifier {
   ) async {
     final url =
         "https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyC2P-w8gQYHrDCLX-BLXm2n-0AUXvaJ-jk";
-    final response = await http.post(
-      url,
-      body: jsonEncode(
-        {
-          'email': userEmail,
-          'password': userPassword,
-          'returnSecureToken': true,
-        },
-      ),
-    );
-    print(jsonDecode(response.body));
+    try {
+      final response = await http.post(
+        url,
+        body: jsonEncode(
+          {
+            'email': userEmail,
+            'password': userPassword,
+            'returnSecureToken': true,
+          },
+        ),
+      );
+      final responseData = jsonDecode(response.body);
+      if (responseData['error'] != null) {
+        throw HttpException(responseData['error']['message']);
+      }
+    } catch (error) {
+      rethrow;
+    }
   }
 
   Future<void> userRegister(String userEmail, String userPassword) async {
