@@ -8,11 +8,18 @@ class Authentication with ChangeNotifier {
   DateTime authenticationTokenExpiryDate;
   String authenticationUserId;
 
-  Authentication({
-    this.authenticationToken,
-    this.authenticationTokenExpiryDate,
-    this.authenticationUserId,
-  });
+  bool get isAuthenticated {
+    return getAuthenticationToken != null;
+  }
+
+  String get getAuthenticationToken {
+    if (authenticationTokenExpiryDate != null &&
+        authenticationTokenExpiryDate.isAfter(DateTime.now()) &&
+        authenticationToken != null) {
+      return authenticationToken;
+    }
+    return null;
+  }
 
   Future<void> userAuthentication(
     String userEmail,
@@ -36,16 +43,32 @@ class Authentication with ChangeNotifier {
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
+      authenticationToken = responseData['idToken'];
+      authenticationUserId = responseData['localId'];
+      authenticationTokenExpiryDate = DateTime.now().add(
+        Duration(
+          seconds: int.parse(responseData['expiresIn']),
+        ),
+      );
+      notifyListeners();
     } catch (error) {
       rethrow;
     }
   }
 
   Future<void> userRegister(String userEmail, String userPassword) async {
-    return userAuthentication(userEmail, userPassword, "signUp");
+    return userAuthentication(
+      userEmail,
+      userPassword,
+      "signUp",
+    );
   }
 
   Future<void> userLogIn(String userEmail, String userPassword) async {
-    return userAuthentication(userEmail, userPassword, "signInWithPassword");
+    return userAuthentication(
+      userEmail,
+      userPassword,
+      "signInWithPassword",
+    );
   }
 }

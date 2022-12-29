@@ -19,7 +19,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   AuthenticationMode _authenticationMode = AuthenticationMode.logIn;
   final Map<String, String> _authenticationData = {
     'email': '',
-    // 'name': '',
     'password': '',
   };
   var _isLoading = false;
