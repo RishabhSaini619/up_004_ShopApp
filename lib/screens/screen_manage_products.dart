@@ -14,12 +14,12 @@ class ManageProductsScreen extends StatelessWidget {
     await Provider.of<Products>(
       context,
       listen: false,
-    ).fetchProducts();
+    ).fetchProducts(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final productsData = Provider.of<Products>(context);
+    // final productsData = Provider.of<Products>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Manage Products"),
@@ -37,26 +37,39 @@ class ManageProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: RefreshIndicator(
-        onRefresh: () => refreshingProducts(context),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: ListView.builder(
-            itemCount: productsData.items.length,
-            itemBuilder: (context, index) => Column(
-              children: [
-                ManageProductsItemWidget(
-                  productsData.items[index].productId,
-                  productsData.items[index].productTitle,
-                  productsData.items[index].productDescription,
-                  productsData.items[index].productPrice,
-                  productsData.items[index].productImageURL,
-                ),
-                const Divider(),
-              ],
-            ),
-          ),
-        ),
+      body: FutureBuilder(
+        future: refreshingProducts(context),
+        builder: (context, builderData) =>
+            builderData.connectionState == ConnectionState.waiting
+                ? Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () => refreshingProducts(context),
+                    child: Consumer<Products>(
+                      builder: (context, productsData, _) => Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: ListView.builder(
+                          itemCount: productsData.items.length,
+                          itemBuilder: (context, index) => Column(
+                            children: [
+                              ManageProductsItemWidget(
+                                productsData.items[index].productId,
+                                productsData.items[index].productTitle,
+                                productsData.items[index].productDescription,
+                                productsData.items[index].productPrice,
+                                productsData.items[index].productImageURL,
+                              ),
+                              const Divider(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
       ),
     );
   }

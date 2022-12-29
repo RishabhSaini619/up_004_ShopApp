@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:up_004_shopapp/screens/screen_cart.dart';
+// import 'package:up_004_shopapp/screens/screen_cart.dart';
 import 'package:up_004_shopapp/screens/screen_orders.dart';
 import 'package:up_004_shopapp/screens/screen_products_overview.dart';
 
@@ -30,17 +30,17 @@ class AppDrawer extends StatelessWidget {
                 Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
               },
             ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.add_shopping_cart_sharp),
-              title: Text(
-                "Cart",
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed(CartScreen.routeName);
-              },
-            ),
+            // const Divider(),
+            // ListTile(
+            //   leading: const Icon(Icons.add_shopping_cart_sharp),
+            //   title: Text(
+            //     "Cart",
+            //     style: Theme.of(context).textTheme.titleMedium,
+            //   ),
+            //   onTap: () {
+            //     Navigator.of(context).pushReplacementNamed(CartScreen.routeName);
+            //   },
+            // ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.shopping_cart_checkout_sharp),

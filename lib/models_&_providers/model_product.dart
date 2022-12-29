@@ -88,14 +88,16 @@ class Products with ChangeNotifier {
 //   notifyListeners();
 // }
 
-  Future<void> fetchProducts() async {
+  Future<void> fetchProducts( [bool filterByUser = false]) async {
+
+    final filterString = filterByUser ? 'orderBy="User Id"&equalTo="$userAuthenticationId"' : '';
     final dataUrl =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json?auth=$userAuthenticationToken';
-    final favurl =
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json?auth=$userAuthenticationToken&$filterString';
+    final favUrl =
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Favorite-Products-List/$userAuthenticationId.json?auth=$userAuthenticationToken';
     try {
       final response = await http.get(dataUrl);
-      final favReponse = await http.get(favurl);
+      final favReponse = await http.get(favUrl);
       final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
       final favData = jsonDecode(favReponse.body) as Map<String, dynamic>;
       if (extractedData == null) {
@@ -106,7 +108,6 @@ class Products with ChangeNotifier {
         extractedProductID,
         extractedProductData,
       ) {
-        print(extractedProductData);
         extractedProductList.add(
           Product(
             productId: extractedProductID,
