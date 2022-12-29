@@ -8,9 +8,14 @@ class Authentication with ChangeNotifier {
   DateTime authenticationTokenExpiryDate;
   String authenticationUserId;
 
+
+
   bool get isAuthenticated {
     return getAuthenticationToken != null;
   }
+   String get getAuthenticationUserId{
+    return authenticationUserId;
+   }
 
   String get getAuthenticationToken {
     if (authenticationTokenExpiryDate != null &&

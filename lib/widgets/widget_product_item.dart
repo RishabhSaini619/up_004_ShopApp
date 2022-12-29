@@ -23,7 +23,7 @@ class ProductItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
-    final auth = Provider.of<Authentication>(context, listen: false);
+    final authenticationData = Provider.of<Authentication>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(30),
@@ -46,16 +46,19 @@ class ProductItemWidget extends StatelessWidget {
                 color: const Color(0xffff0000),
               ),
               onPressed: () {
-                product.toggleFavoriteStatus(auth.authenticationToken);
+                product.toggleFavoriteStatus(
+                  authenticationData.authenticationToken,
+                  authenticationData.getAuthenticationUserId
+                );
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    shape:  const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(30),
-                        ),),
-                    backgroundColor:
-                    Colors.deepOrange.withOpacity(0.4),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(30),
+                      ),
+                    ),
+                    backgroundColor: Colors.deepOrange.withOpacity(0.4),
                     // Theme.of(context).colorScheme.primary.withOpacity(0.4),
                     content: Text(
                       'Item added to Favorite',
@@ -74,7 +77,6 @@ class ProductItemWidget extends StatelessWidget {
                     // ),
                   ),
                 );
-
               },
             ),
           ),

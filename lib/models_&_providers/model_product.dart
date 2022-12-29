@@ -29,14 +29,15 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavoriteStatus(String userAuthenticationToken) async {
+  Future<void> toggleFavoriteStatus(
+      String userAuthenticationToken, String userAuthenticationId) async {
     final oldStatus = isProductFavorite;
     isProductFavorite = !isProductFavorite;
     notifyListeners();
     final url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$productId.json?auth=$userAuthenticationToken';
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Favorite-Products-List/$userAuthenticationId/$productId.json?auth=$userAuthenticationToken';
     try {
-      final response = await http.patch(
+      final response = await http.put(
         url,
         body: json.encode(
           {
@@ -54,10 +55,12 @@ class Product with ChangeNotifier {
 }
 
 class Products with ChangeNotifier {
+  final String userAuthenticationId;
   final String userAuthenticationToken;
   List<Product> _items = [];
 
   Products(
+    this.userAuthenticationId,
     this.userAuthenticationToken,
     this._items,
   );
@@ -86,25 +89,34 @@ class Products with ChangeNotifier {
 // }
 
   Future<void> fetchProducts() async {
-    final url =
+    final dataUrl =
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json?auth=$userAuthenticationToken';
+    final favurl =
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Favorite-Products-List/$userAuthenticationId.json?auth=$userAuthenticationToken';
     try {
-      final response = await http.get(url);
+      final response = await http.get(dataUrl);
+      final favReponse = await http.get(favurl);
       final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
+      final favData = jsonDecode(favReponse.body) as Map<String, dynamic>;
       if (extractedData == null) {
         return;
       }
       final List<Product> extractedProductList = [];
-      extractedData.forEach((extractedProductID, extractedProductData) {
+      extractedData.forEach((
+        extractedProductID,
+        extractedProductData,
+      ) {
         print(extractedProductData);
         extractedProductList.add(
           Product(
             productId: extractedProductID,
             productTitle: extractedProductData['Product Title'],
             productDescription: extractedProductData['Product Description'],
-            productPrice:extractedProductData['Product Price'].toDouble(),
+            productPrice: extractedProductData['Product Price'].toDouble(),
             productImageURL: extractedProductData['Product ImageURL'],
-            isProductFavorite: extractedProductData['Favorite Product'],
+            isProductFavorite: favData == null
+                ? false
+                : favData['$extractedProductID Favorite Product'] ?? false,
           ),
         );
       });
