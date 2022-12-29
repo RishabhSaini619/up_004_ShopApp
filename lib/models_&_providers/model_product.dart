@@ -141,6 +141,8 @@ class Products with ChangeNotifier {
             'Product Price': addedProduct.productPrice.toDouble(),
             'Product ImageURL': addedProduct.productImageURL,
             'Favorite Product': addedProduct.isProductFavorite,
+            'User Id': userAuthenticationId,
+
           },
         ),
       );
