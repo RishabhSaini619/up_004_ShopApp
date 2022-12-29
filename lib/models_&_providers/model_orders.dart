@@ -18,17 +18,22 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
+  final String userAuthenticationId;
   final String userAuthenticationToken;
   List<OrderItem> _orders = [];
 
-  Orders(this.userAuthenticationToken,this._orders);
+  Orders(
+    this.userAuthenticationId,
+    this.userAuthenticationToken,
+    this._orders,
+  );
   List<OrderItem> get orders {
     return [..._orders];
   }
 
   Future<void> fetchOrder() async {
     final url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List.json?auth=$userAuthenticationToken';
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List/$userAuthenticationId.json?auth=$userAuthenticationToken';
     final response = await http.get(url);
     final List<OrderItem> extractedOrderList = [];
     final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
@@ -49,7 +54,7 @@ class Orders with ChangeNotifier {
                   .map(
                     (item) => CartItem(
                       cartItemId: item['Product Id'],
-                      cartItemTitle:  item['Product Title'],
+                      cartItemTitle: item['Product Title'],
                       cartItemPrice: item['Product Price'].toDouble(),
                       cartItemQuantity: item['Product Quantity'],
                     ),
@@ -64,7 +69,7 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> cartProducts, double cartAmount) async {
     final url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List.json?auth=$userAuthenticationToken';
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List/$userAuthenticationId.json?auth=$userAuthenticationToken';
     final currentTimeStamp = DateTime.now();
     final response = await http.post(
       url,
