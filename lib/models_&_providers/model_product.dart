@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, unrelated_type_equality_checks
 
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
@@ -96,12 +96,13 @@ class Products with ChangeNotifier {
       }
       final List<Product> extractedProductList = [];
       extractedData.forEach((extractedProductID, extractedProductData) {
+        print(extractedProductData);
         extractedProductList.add(
           Product(
             productId: extractedProductID,
             productTitle: extractedProductData['Product Title'],
             productDescription: extractedProductData['Product Description'],
-            productPrice: extractedProductData['Product Price'],
+            productPrice:extractedProductData['Product Price'].toDouble(),
             productImageURL: extractedProductData['Product ImageURL'],
             isProductFavorite: extractedProductData['Favorite Product'],
           ),
@@ -125,7 +126,7 @@ class Products with ChangeNotifier {
           {
             'Product Title': addedProduct.productTitle,
             'Product Description': addedProduct.productDescription,
-            'Product Price': addedProduct.productPrice,
+            'Product Price': addedProduct.productPrice.toDouble(),
             'Product ImageURL': addedProduct.productImageURL,
             'Favorite Product': addedProduct.isProductFavorite,
           },
@@ -136,7 +137,7 @@ class Products with ChangeNotifier {
         productId: json.decode(response.body)['Product Id'],
         productTitle: addedProduct.productTitle,
         productDescription: addedProduct.productDescription,
-        productPrice: addedProduct.productPrice,
+        productPrice: addedProduct.productPrice.toDouble(),
         productImageURL: addedProduct.productImageURL,
       );
       _items.add(newProduct);
@@ -166,7 +167,7 @@ class Products with ChangeNotifier {
           {
             'Product Title': updatingProduct.productTitle,
             'Product Description': updatingProduct.productDescription,
-            'Product Price': updatingProduct.productPrice,
+            'Product Price': updatingProduct.productPrice.toDouble(),
             'Product ImageURL': updatingProduct.productImageURL,
             'Favorite Product': updatingProduct.isProductFavorite,
           },

@@ -19,7 +19,6 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   final String userAuthenticationToken;
-
   List<OrderItem> _orders = [];
 
   Orders(this.userAuthenticationToken,this._orders);
@@ -29,7 +28,7 @@ class Orders with ChangeNotifier {
 
   Future<void> fetchOrder() async {
     final url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List.jsonauth=$userAuthenticationToken';
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List.json?auth=$userAuthenticationToken';
     final response = await http.get(url);
     final List<OrderItem> extractedOrderList = [];
     final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
@@ -51,7 +50,7 @@ class Orders with ChangeNotifier {
                     (item) => CartItem(
                       cartItemId: item['Product Id'],
                       cartItemTitle:  item['Product Title'],
-                      cartItemPrice: item['Product Price'],
+                      cartItemPrice: item['Product Price'].toDouble(),
                       cartItemQuantity: item['Product Quantity'],
                     ),
                   )
