@@ -29,12 +29,12 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavoriteStatus() async {
+  Future<void> toggleFavoriteStatus(String userAuthenticationToken) async {
     final oldStatus = isProductFavorite;
     isProductFavorite = !isProductFavorite;
     notifyListeners();
     final url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$productId.json';
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$productId.json?auth=$userAuthenticationToken';
     try {
       final response = await http.patch(
         url,
@@ -54,7 +54,13 @@ class Product with ChangeNotifier {
 }
 
 class Products with ChangeNotifier {
-  List<Product> _items =[];
+  final String userAuthenticationToken;
+  List<Product> _items = [];
+
+  Products(
+    this.userAuthenticationToken,
+    this._items,
+  );
 
 // var _showFavoritesOnly = false;
 
@@ -80,8 +86,8 @@ class Products with ChangeNotifier {
 // }
 
   Future<void> fetchProducts() async {
-    const url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json';
+    final url =
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json?auth=$userAuthenticationToken';
     try {
       final response = await http.get(url);
       final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
@@ -110,8 +116,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product addedProduct) async {
-    const url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json';
+    final url =
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json?auth=$userAuthenticationToken';
     try {
       final response = await http.post(
         url,
@@ -153,7 +159,7 @@ class Products with ChangeNotifier {
     });
     if (updateProductIndex >= 0) {
       final url =
-          'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$updatingProductID.json';
+          'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$updatingProductID.json?auth=$userAuthenticationToken';
       await http.patch(
         url,
         body: json.encode(
@@ -175,7 +181,7 @@ class Products with ChangeNotifier {
 
   Future<void> deleteProduct(String deletingProductID) async {
     final url =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$deletingProductID.json';
+        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List/$deletingProductID.json?auth=$userAuthenticationToken';
     final existingProductIndex =
         _items.indexWhere((element) => element.productId == deletingProductID);
     var existingProduct = _items[existingProductIndex];

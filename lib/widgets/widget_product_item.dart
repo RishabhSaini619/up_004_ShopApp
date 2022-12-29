@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
+import 'package:up_004_shopapp/models_&_providers/model_authentication.dart';
 import 'package:up_004_shopapp/screens/screen_product_detail.dart';
 import 'package:provider/provider.dart';
 import '../models_&_providers/model_cart.dart';
@@ -22,6 +23,7 @@ class ProductItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final auth = Provider.of<Authentication>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(30),
@@ -44,7 +46,7 @@ class ProductItemWidget extends StatelessWidget {
                 color: const Color(0xffff0000),
               ),
               onPressed: () {
-                product.toggleFavoriteStatus();
+                product.toggleFavoriteStatus(auth.authenticationToken);
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

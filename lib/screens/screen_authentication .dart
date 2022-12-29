@@ -218,6 +218,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                     ),
                           ),
                           keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
                           validator: (email) {
                             if (email.isEmpty || !email.contains('@')) {
                               return 'Invalid email!';
@@ -254,6 +255,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                         //       ),
                         //     ),
                         //     keyboardType: TextInputType.text,
+                        //textInputAction: TextInputAction.next,
                         //     validator: (name) {
                         //       if (name.isEmpty) {
                         //         return 'Please enter user name *';
@@ -304,6 +306,8 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                           ),
                           obscureText: obscureTextData,
                           controller: _passwordController,
+                          textInputAction: TextInputAction.done,
+
                           validator: (pass) {
                             if (pass.isEmpty || pass.length < 5) {
                               return ('Password is too short!');
@@ -358,6 +362,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                   ),
                             ),
                             obscureText: obscureTextData,
+                            textInputAction: TextInputAction.done,
                             // controller: _passwordController,
                             validator:
                                 _authenticationMode == AuthenticationMode.signUp
