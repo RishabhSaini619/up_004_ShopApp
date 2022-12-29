@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'model_http_exception.dart';
@@ -7,6 +8,7 @@ class Authentication with ChangeNotifier {
   String authenticationToken;
   DateTime authenticationTokenExpiryDate;
   String authenticationUserId;
+  Timer  authenticationUserTimer;
 
   bool get isAuthenticated {
     return getAuthenticationToken != null;
@@ -54,6 +56,7 @@ class Authentication with ChangeNotifier {
           seconds: int.parse(responseData['expiresIn']),
         ),
       );
+      autoLogOut;
       notifyListeners();
     } catch (error) {
       rethrow;
@@ -80,6 +83,21 @@ class Authentication with ChangeNotifier {
     authenticationUserId = null;
     authenticationToken = null;
     authenticationTokenExpiryDate = null;
-    NotificationListener();
+    if(authenticationUserTimer != null) {
+      authenticationUserTimer.cancel();
+      authenticationUserTimer =null;
+    }
+    const NotificationListener();
+  }
+
+  void autoLogOut() {
+    if(authenticationUserTimer != null) {
+      authenticationUserTimer.cancel();
+    }
+   final timeLeft = authenticationTokenExpiryDate.difference(DateTime.now()).inSeconds;
+   authenticationUserTimer = Timer(
+      Duration(seconds: timeLeft),
+      userLogOut,
+    );
   }
 }
