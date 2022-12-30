@@ -16,7 +16,7 @@ import 'screens/screen_manage_products.dart';
 import 'screens/screen_orders.dart';
 import 'screens/screen_product_detail.dart';
 import 'screens/screen_products_overview.dart';
-import 'screens/screen_splash.dart';
+import 'screens/screen_splash_loading.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -136,16 +136,16 @@ class MyApp extends StatelessWidget {
                   future: authenticationData.autoLogIn(),
                   builder: (context, builderSnapshot) =>
                       builderSnapshot.connectionState == ConnectionState.waiting
-                          ? SplashScreen()
-                          : AuthenticationScreen(),
+                          ? const LoadingSplashScreen()
+                          : const AuthenticationScreen(),
                 ),
           routes: {
             ProductsOverviewScreen.routeName: (ctx) => const ProductsOverviewScreen(),
             ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
-            CartScreen.routeName: (ctx) => CartScreen(),
-            OrdersScreen.routeName: (ctx) => OrdersScreen(),
-            ManageProductsScreen.routeName: (ctx) => ManageProductsScreen(),
-            EditProductScreen.routeName: (ctx) => EditProductScreen(),
+            CartScreen.routeName: (ctx) => const CartScreen(),
+            OrdersScreen.routeName: (ctx) => const OrdersScreen(),
+            ManageProductsScreen.routeName: (ctx) => const ManageProductsScreen(),
+            EditProductScreen.routeName: (ctx) => const EditProductScreen(),
           },
         ),
       ),
