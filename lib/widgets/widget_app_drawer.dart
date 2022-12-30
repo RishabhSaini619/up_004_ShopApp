@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:up_004_shopapp/models_&_providers/model_authentication.dart';
-import 'package:up_004_shopapp/screens/screen_authentication%20.dart';
+// import 'package:up_004_shopapp/screens/screen_authentication%20.dart';
 // import 'package:up_004_shopapp/screens/screen_cart.dart';
 import 'package:up_004_shopapp/screens/screen_orders.dart';
 import 'package:up_004_shopapp/screens/screen_products_overview.dart';
@@ -75,7 +75,7 @@ class AppDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushReplacementNamed(AuthenticationScreen.routeName);
+                Navigator.of(context).pushReplacementNamed('/');
                 Provider.of<Authentication>(context,listen: false).userLogOut();
               },
             ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+
 import 'models_&_providers/model_authentication.dart';
 import 'models_&_providers/model_cart.dart';
 import 'models_&_providers/model_orders.dart';
@@ -16,6 +17,7 @@ import 'screens/screen_manage_products.dart';
 import 'screens/screen_orders.dart';
 import 'screens/screen_product_detail.dart';
 import 'screens/screen_products_overview.dart';
+import 'screens/screen_splash.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -131,7 +133,16 @@ class MyApp extends StatelessWidget {
           ),
           home: authenticationData.isAuthenticated
               ? const ProductsOverviewScreen()
-              : AuthenticationScreen(),
+              : FutureBuilder(
+                  future: authenticationData.autoLogIn(),
+                  builder: (
+                    context,
+                    builderSnapshot
+                  ) =>
+                      builderSnapshot.connectionState == ConnectionState.waiting
+                          ? SplashScreen()
+                          :   AuthenticationScreen(),
+                ),
           routes: {
             AuthenticationScreen.routeName: (ctx) => AuthenticationScreen(),
             ProductsOverviewScreen.routeName: (ctx) =>
