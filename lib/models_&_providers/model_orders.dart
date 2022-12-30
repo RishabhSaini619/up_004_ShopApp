@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -36,7 +38,7 @@ class Orders with ChangeNotifier {
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Orders-List/$userAuthenticationId.json?auth=$userAuthenticationToken';
     final response = await http.get(url);
     final List<OrderItem> extractedOrderList = [];
-    final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
     if (extractedData == null) {
       return;
     }
@@ -58,8 +60,7 @@ class Orders with ChangeNotifier {
                       cartItemPrice: item['Product Price'].toDouble(),
                       cartItemQuantity: item['Product Quantity'],
                     ),
-                  )
-                  .toList(),
+                  ).toList(),
         ),
       );
     });

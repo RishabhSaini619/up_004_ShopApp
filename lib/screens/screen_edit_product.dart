@@ -1,11 +1,14 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../models_&_providers/model_product.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/EditProductScreen';
+
+  const EditProductScreen({Key key}) : super(key: key);
 
   @override
   State<EditProductScreen> createState() => _EditProductScreenState();
@@ -26,7 +29,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     productId: null,
     productTitle: "",
     productDescription: "",
-    productPrice: 0.0,
+    productPrice: 0.00,
     productImageURL: "",
   );
   var initialProductValue = {
@@ -53,10 +56,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
         addedProduct.productId,
         addedProduct,
       );
-      setState(() {
-        isLoading = false;
-      });
-      Navigator.of(context).pop();
     } else {
       try {
         await Provider.of<Products>(
@@ -108,21 +107,28 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      } finally {
-        setState(() {
-          isLoading = false;
-        });
-        Navigator.of(context).pop();
       }
+      // finally {
+      //   setState(() {
+      //     isLoading = false;
+      //   });
+      //   Navigator.of(context).pop();
+      //}
     }
-
+    setState(() {
+      isLoading = false;
+    });
+    Navigator.of(context).pop();
   }
 
   void updateImageUrl() {
     if (!imageUrlFocusNode.hasFocus) {
       if (editedProductImageURLController.text.isEmpty ||
           (!editedProductImageURLController.text.startsWith('http') &&
-              !editedProductImageURLController.text.startsWith('https'))) {
+              !editedProductImageURLController.text.startsWith('https')) ||
+          (!editedProductImageURLController.text.endsWith('.png') &&
+              !editedProductImageURLController.text.endsWith('.jpg') &&
+              !editedProductImageURLController.text.endsWith('.jpeg'))) {
         return;
       }
 
@@ -142,8 +148,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
       final editingProductID =
           ModalRoute.of(context).settings.arguments as String;
       if (editingProductID != null) {
-        final editingProduct = Provider.of<Products>(context, listen: false)
-            .findById(editingProductID);
+        final editingProduct = Provider.of<Products>(
+          context,
+          listen: false,
+        ).findById(editingProductID);
 
         addedProduct = editingProduct;
         editedProductTitleController.text = editingProduct.productTitle;
@@ -174,7 +182,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("New Product"),
+        title: const Text("Edit Product"),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
         actions: [
           IconButton(
@@ -401,6 +409,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               if (!value.startsWith('http') &&
                                   !value.startsWith('https')) {
                                 return 'Please enter valid \n product ImageURL *';
+                              }
+                              if (!value.endsWith('.png') &&
+                                  !value.endsWith('.jpg') &&
+                                  !value.endsWith('.jpeg')) {
+                                return 'Please enter a valid image URL.';
                               }
                               return null;
                             },

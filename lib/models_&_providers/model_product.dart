@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, unrelated_type_equality_checks
 
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -88,21 +89,21 @@ class Products with ChangeNotifier {
 //   notifyListeners();
 // }
 
-  Future<void> fetchProducts( [bool filterByUser = false]) async {
-
-    final filterString = filterByUser ? 'orderBy="User Id"&equalTo="$userAuthenticationId"' : '';
+  Future<void> fetchProducts([bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? 'orderBy="User Id"&equalTo="$userAuthenticationId"' : '';
     final dataUrl =
         'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Products-List.json?auth=$userAuthenticationToken&$filterString';
-    final favUrl =
-        'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Favorite-Products-List/$userAuthenticationId.json?auth=$userAuthenticationToken';
     try {
       final response = await http.get(dataUrl);
-      final favReponse = await http.get(favUrl);
-      final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
-      final favData = jsonDecode(favReponse.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if (extractedData == null) {
         return;
       }
+      final favUrl =
+          'https://up-004-shop-app-default-rtdb.asia-southeast1.firebasedatabase.app/Favorite-Products-List/$userAuthenticationId.json?auth=$userAuthenticationToken';
+      final favResponse = await http.get(favUrl);
+      final favData = json.decode(favResponse.body);
       final List<Product> extractedProductList = [];
       extractedData.forEach((
         extractedProductID,
@@ -143,7 +144,6 @@ class Products with ChangeNotifier {
             'Product ImageURL': addedProduct.productImageURL,
             'Favorite Product': addedProduct.isProductFavorite,
             'User Id': userAuthenticationId,
-
           },
         ),
       );
@@ -201,9 +201,9 @@ class Products with ChangeNotifier {
     final existingProductIndex =
         _items.indexWhere((element) => element.productId == deletingProductID);
     var existingProduct = _items[existingProductIndex];
-    final response = await http.delete(url);
     _items.removeAt(existingProductIndex);
     notifyListeners();
+    final response = await http.delete(url);
     if (response.statusCode >= 400) {
       _items.insert(existingProductIndex, existingProduct);
       notifyListeners();

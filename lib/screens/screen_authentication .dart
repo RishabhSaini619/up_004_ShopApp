@@ -2,13 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:up_004_shopapp/models_&_providers/model_authentication.dart';
-import 'package:up_004_shopapp/models_&_providers/model_http_exception.dart';
+
+import '../models_&_providers/model_authentication.dart';
+import '../models_&_providers/model_http_exception.dart';
 
 enum AuthenticationMode { signUp, logIn }
 
 class AuthenticationScreen extends StatefulWidget {
   static const routeName = '/AuthenticationScreen';
+
+  const AuthenticationScreen({Key key}) : super(key: key);
 
   @override
   State<AuthenticationScreen> createState() => _AuthenticationScreenState();
@@ -25,14 +28,14 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   var obscureTextData = false;
   final _passwordController = TextEditingController();
 
-  void _showErrorDialog(String errorMeaasge) {
+  void _showErrorDialog(String errorMessage) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         alignment: Alignment.center,
         title: const Text("An error occurred!"),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
-        content: Text(errorMeaasge),
+        content: Text(errorMessage),
         contentTextStyle: Theme.of(context).textTheme.bodyMedium,
         shape: const RoundedRectangleBorder(
           side: BorderSide(
@@ -104,19 +107,20 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     } on HttpException catch (error) {
       var errorMessage = "Authentication Failed.";
       if (error.toString().contains('EMAIL_EXISTS')) {
-        errorMessage = "Email already exists";
+        errorMessage = "This email address is already in use.";
       } else if (error.toString().contains('INVALID_EMAIL')) {
-        errorMessage = "Email is invalid";
+        errorMessage = "This is not a valid email address";
       } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
-        errorMessage = "Email is not found";
+        errorMessage = "Could not find a user with that email.";
       } else if (error.toString().contains('WEEK_PASSWORD')) {
-        errorMessage = "Password is week";
+        errorMessage = "This password is too weak.";
       } else if (error.toString().contains('INVALID_PASSWORD')) {
-        errorMessage = "Password is invalid";
+        errorMessage = "This password is invalid";
       }
       _showErrorDialog(errorMessage);
     } catch (error) {
-      const errorMessage = "Could not authentication. Please try again later";
+      const errorMessage =
+          "Could not authenticate you. Please try again later.";
       _showErrorDialog(errorMessage);
     }
 
@@ -125,7 +129,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
     });
   }
 
-  void _switchAuthenticationMode() {
+  void switchAuthenticationMode() {
     if (_authenticationMode == AuthenticationMode.logIn) {
       setState(() {
         _authenticationMode = AuthenticationMode.signUp;
@@ -230,44 +234,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                           },
                         ),
                         const Divider(),
-                        // if (_authenticationMode == AuthenticationMode.signUp)
-                        //   TextFormField(
-                        //     decoration: InputDecoration(
-                        //       border: OutlineInputBorder(
-                        //         borderRadius: BorderRadius.circular(15),
-                        //         borderSide: BorderSide(
-                        //           color: Theme.of(context).colorScheme.primary,
-                        //         ),
-                        //       ),
-                        //       icon: Icon(
-                        //         Icons.person,
-                        //         color: Theme.of(context).colorScheme.primary,
-                        //       ),
-                        //       labelText: "Name",
-                        //       labelStyle: Theme.of(context).textTheme.bodyLarge,
-                        //       hintText: "User Name",
-                        //       hintStyle: Theme.of(context).textTheme.bodyMedium,
-                        //       errorStyle: Theme.of(context)
-                        //           .textTheme
-                        //           .bodySmall
-                        //           .copyWith(
-                        //         color: Colors.white,
-                        //       ),
-                        //     ),
-                        //     keyboardType: TextInputType.text,
-                        //textInputAction: TextInputAction.next,
-                        //     validator: (name) {
-                        //       if (name.isEmpty) {
-                        //         return 'Please enter user name *';
-                        //       }
-                        //       return null;
-                        //     },
-                        //     onSaved: (name) {
-                        //       _authenticationData['name'] = name;
-                        //     },
-                        //   ),
-                        // if (_authenticationMode == AuthenticationMode.signUp)
-                        //   const Divider(),
                         TextFormField(
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -307,7 +273,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                           obscureText: obscureTextData,
                           controller: _passwordController,
                           textInputAction: TextInputAction.done,
-
                           validator: (pass) {
                             if (pass.isEmpty || pass.length < 5) {
                               return ('Password is too short!');
@@ -368,9 +333,9 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                                 _authenticationMode == AuthenticationMode.signUp
                                     ? (cpass) {
                                         if (cpass != _passwordController.text) {
-                                          'Passwords do not match!';
+                                          return 'Passwords do not match!';
                                         }
-                                        return;
+                                        return null;
                                       }
                                     : null,
                           ),
@@ -445,7 +410,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                             ),
                           ),
                         ),
-                        onPressed: _switchAuthenticationMode,
+                        onPressed: switchAuthenticationMode,
                         child: Text(
                           _authenticationMode == AuthenticationMode.logIn
                               ? 'Register'

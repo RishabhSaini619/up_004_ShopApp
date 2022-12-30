@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +8,6 @@ import '../models_&_providers/model_cart.dart';
 class CartItemWidget extends StatelessWidget {
   final String cardItemId;
   final String productId;
-
   final String cardItemTitle;
   final double cardItemPrice;
   final int cardItemQuantity;
@@ -16,8 +17,8 @@ class CartItemWidget extends StatelessWidget {
     this.productId,
     this.cardItemTitle,
     this.cardItemPrice,
-    this.cardItemQuantity,
-  );
+    this.cardItemQuantity, {Key key}
+  ) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

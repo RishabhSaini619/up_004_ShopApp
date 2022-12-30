@@ -10,6 +10,8 @@ import '../widgets/widget_manage_products_item.dart';
 class ManageProductsScreen extends StatelessWidget {
   static const routeName = '/ManageProductsScreen';
 
+  const ManageProductsScreen({Key key}) : super(key: key);
+
   Future<void> refreshingProducts(BuildContext context) async {
     await Provider.of<Products>(
       context,
@@ -36,7 +38,7 @@ class ManageProductsScreen extends StatelessWidget {
           ),
         ],
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: FutureBuilder(
         future: refreshingProducts(context),
         builder: (context, builderData) =>

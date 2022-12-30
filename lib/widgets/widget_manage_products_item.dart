@@ -1,5 +1,7 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' show Provider;
 import '../models_&_providers/model_product.dart';
 import '../screens/screen_edit_product.dart';
 
@@ -15,8 +17,8 @@ class ManageProductsItemWidget extends StatelessWidget {
     this.manageProductsItemWidgetTitle,
     this.manageProductsItemWidgetDescription,
     this.manageProductsItemWidgetAmount,
-    this.manageProductsItemWidgetImageURL,
-  );
+    this.manageProductsItemWidgetImageURL, {Key key}
+  ) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

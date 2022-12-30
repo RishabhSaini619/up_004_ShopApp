@@ -1,11 +1,14 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
-import 'package:up_004_shopapp/models_&_providers/model_authentication.dart';
-import 'package:up_004_shopapp/screens/screen_product_detail.dart';
 import 'package:provider/provider.dart';
+
+import '../models_&_providers/model_authentication.dart';
 import '../models_&_providers/model_cart.dart';
 import '../models_&_providers/model_product.dart';
+
+import '../screens/screen_product_detail.dart';
+
 
 class ProductItemWidget extends StatelessWidget {
   const ProductItemWidget({Key key}) : super(key: key);
@@ -67,14 +70,14 @@ class ProductItemWidget extends StatelessWidget {
                     ),
 
                     duration: const Duration(seconds: 1),
-                    // action: SnackBarAction(
-                    //   label: 'UNDO',
-                    //   textColor: Colors.white,
-                    //   disabledTextColor: Colors.white54,
-                    //   onPressed: () {
-                    //     cart.removeSelectedItem(product.productId);
-                    //   },
-                    // ),
+                    action: SnackBarAction(
+                      label: 'UNDO',
+                      textColor: Colors.white,
+                      disabledTextColor: Colors.white54,
+                      onPressed: () {
+                        cart.removeSelectedItem(product.productId);
+                      },
+                    ),
                   ),
                 );
               },

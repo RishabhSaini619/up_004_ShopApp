@@ -1,12 +1,16 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models_&_providers/model_orders.dart';
+
+import '../models_&_providers/model_orders.dart'show Orders;
+
 import '../widgets/widget_app_drawer.dart';
 import '../widgets/widget_order_item.dart';
 
 class OrdersScreen extends StatefulWidget {
   static const routeName = '/OrdersScreen';
+
+  const OrdersScreen({Key key}) : super(key: key);
 
   @override
   State<OrdersScreen> createState() => _OrdersScreenState();
@@ -24,14 +28,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    print('building orders');
     // final ordersData = Provider.of<Orders>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Orders"),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: FutureBuilder(
         future: _ordersFuture,
         builder: (context, dataSnapshot) {

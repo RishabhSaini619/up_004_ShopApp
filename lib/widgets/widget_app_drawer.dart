@@ -1,14 +1,18 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:up_004_shopapp/models_&_providers/model_authentication.dart';
-// import 'package:up_004_shopapp/screens/screen_authentication%20.dart';
-// import 'package:up_004_shopapp/screens/screen_cart.dart';
-import 'package:up_004_shopapp/screens/screen_orders.dart';
-import 'package:up_004_shopapp/screens/screen_products_overview.dart';
+
+import '../models_&_providers/model_authentication.dart';
+
+import '../screens/screen_orders.dart';
+import '../screens/screen_products_overview.dart';
 
 import '../screens/screen_manage_products.dart';
 
 class AppDrawer extends StatelessWidget {
+  const AppDrawer({Key key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +37,7 @@ class AppDrawer extends StatelessWidget {
                 Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
               },
             ),
-            // const Divider(),
-            // ListTile(
-            //   leading: const Icon(Icons.add_shopping_cart_sharp),
-            //   title: Text(
-            //     "Cart",
-            //     style: Theme.of(context).textTheme.titleMedium,
-            //   ),
-            //   onTap: () {
-            //     Navigator.of(context).pushReplacementNamed(CartScreen.routeName);
-            //   },
-            // ),
+
             const Divider(),
             ListTile(
               leading: const Icon(Icons.shopping_cart_checkout_sharp),

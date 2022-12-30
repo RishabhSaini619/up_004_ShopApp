@@ -1,8 +1,13 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../models_&_providers/model_cart.dart';
 import '../models_&_providers/model_product.dart';
+
 import '../screens/screen_cart.dart';
+
 import '../widgets/widget_app_drawer.dart';
 import '../widgets/widget_badge.dart';
 import '../widgets/widget_product_grid.dart';

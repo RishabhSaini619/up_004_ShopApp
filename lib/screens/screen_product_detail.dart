@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models_&_providers/model_product.dart';
@@ -7,7 +9,6 @@ class ProductDetailScreen extends StatelessWidget {
 
   const ProductDetailScreen({Key key}) : super(key: key);
   // final String productItemTitle;
-  //
   // const ProductDetailScreen( this.productItemTitle,
   //     {Key key}) : super(key: key);
 
@@ -39,7 +40,6 @@ class ProductDetailScreen extends StatelessWidget {
         child: containerWidget,
       );
     }
-
     Widget containerChildWidget(String containerText, String containerSubText) {
       return containerWidget(
         Column(
@@ -73,9 +73,7 @@ class ProductDetailScreen extends StatelessWidget {
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
       ),
       body: SingleChildScrollView(
-
         child: containerWidget(
-
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,70 +103,6 @@ class ProductDetailScreen extends StatelessWidget {
               const SizedBox(height: 10),
               containerChildWidget(
                   'Description ', loadedProduct.productDescription),
-              // const SizedBox(
-              //   height: 15,
-              // ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //   children: [
-              //     ElevatedButton(
-              //       style: ButtonStyle(
-              //         backgroundColor: MaterialStatePropertyAll<Color>(
-              //             Theme.of(context).colorScheme.primary),
-              //         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              //           RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(20),
-              //             side: BorderSide(
-              //                 color: Theme.of(context).colorScheme.primary),
-              //           ),
-              //         ),
-              //       ),
-              //       onPressed: () {
-              //     // product.toggleFavoriteStatus();
-              //     },
-              //       child: Row(
-              //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //         children: [
-              //           Text('Add to Favorite ',
-              //               style: Theme.of(context).textTheme.bodyLarge),
-              //           const Icon(
-              //             // product.isProductFavorite?
-              //             Icons.favorite_sharp,
-              //               // : Icons.favorite_border_sharp,
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //     ElevatedButton(
-              //       style: ButtonStyle(
-              //         backgroundColor: MaterialStatePropertyAll<Color>(
-              //             Theme.of(context).colorScheme.primary),
-              //         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              //           RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(20),
-              //             side: BorderSide(
-              //                 color: Theme.of(context).colorScheme.primary),
-              //           ),
-              //         ),
-              //       ),
-              //       onPressed: () {
-              //         // cart.addItem(product.productId, product.productTitle,
-              //             // product.productPrice);
-              //       },
-              //       child: Row(
-              //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //         children: [
-              //           Text('Add to Cart',
-              //               style: Theme.of(context).textTheme.bodyLarge),
-              //           const Icon(
-              //             Icons.shopping_cart_sharp,
-              //             size: 20,
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
             ],
           ),
           1,

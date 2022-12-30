@@ -24,21 +24,24 @@ class Cart with ChangeNotifier {
     double productPrice,
   ) {
     if (_items.containsKey(productId)) {
+      // change quantity...
       _items.update(
-          productId,
-          (existingCartItem) => CartItem(
-              cartItemId : existingCartItem.cartItemId,
-              cartItemTitle : existingCartItem.cartItemTitle,
-              cartItemQuantity : existingCartItem.cartItemQuantity + 1,
-              cartItemPrice : existingCartItem.cartItemPrice));
+        productId,
+        (existingCartItem) => CartItem(
+          cartItemId: existingCartItem.cartItemId,
+          cartItemTitle: existingCartItem.cartItemTitle,
+          cartItemQuantity: existingCartItem.cartItemQuantity + 1,
+          cartItemPrice: existingCartItem.cartItemPrice,
+        ),
+      );
     } else {
       _items.putIfAbsent(
         productId,
         () => CartItem(
-          cartItemId : DateTime.now().toString(),
-          cartItemTitle :  productTitle,
-          cartItemQuantity : 1,
-          cartItemPrice : productPrice,
+          cartItemId: DateTime.now().toString(),
+          cartItemTitle: productTitle,
+          cartItemQuantity: 1,
+          cartItemPrice: productPrice,
         ),
       );
     }
@@ -60,10 +63,10 @@ class Cart with ChangeNotifier {
       _items.update(
         productId,
         (existingCartItem) => CartItem(
-          cartItemId : existingCartItem.cartItemId,
-          cartItemTitle : existingCartItem.cartItemTitle,
-          cartItemQuantity : existingCartItem.cartItemQuantity - 1,
-          cartItemPrice :existingCartItem.cartItemPrice,
+          cartItemId: existingCartItem.cartItemId,
+          cartItemTitle: existingCartItem.cartItemTitle,
+          cartItemQuantity: existingCartItem.cartItemQuantity - 1,
+          cartItemPrice: existingCartItem.cartItemPrice,
         ),
       );
     } else {

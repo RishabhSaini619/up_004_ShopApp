@@ -1,12 +1,18 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../models_&_providers/model_cart.dart';
 import '../models_&_providers/model_orders.dart';
+
 import '../widgets/widget_app_drawer.dart';
 import '../widgets/widget_cart_item.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/CartScreen';
+
+  const CartScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +22,7 @@ class CartScreen extends StatelessWidget {
         title: const Text("Cart"),
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: Column(
         children: [
           Expanded(

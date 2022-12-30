@@ -1,12 +1,17 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../models_&_providers/model_orders.dart';
 
 class OrderItemWidget extends StatefulWidget {
   final OrderItem orderItemWidgetOrders;
 
-  const OrderItemWidget(this.orderItemWidgetOrders);
+  const OrderItemWidget(this.orderItemWidgetOrders, {Key key})
+      : super(key: key);
 
   @override
   State<OrderItemWidget> createState() => _OrderItemWidgetState();
@@ -30,14 +35,11 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
       ),
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(30),
             side: BorderSide(
-                width: 2,
-                color: Theme.of(context).colorScheme.primary,
-            )
-
-        ),
-
+              width: 2,
+              color: Theme.of(context).colorScheme.primary,
+            )),
         margin: const EdgeInsets.all(10),
         child: Column(
           children: [
@@ -89,7 +91,6 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
                 ),
                 padding: const EdgeInsets.all(5),
                 margin: const EdgeInsets.all(10),
-
                 child: ListView(
                   children: widget.orderItemWidgetOrders.orderItemProducts
                       .map(
@@ -101,7 +102,7 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             Text(
-                             " ${products.cartItemQuantity} x ₹ ${products.cartItemPrice}",
+                              " ${products.cartItemQuantity} x ₹ ${products.cartItemPrice}",
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                           ],

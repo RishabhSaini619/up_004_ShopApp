@@ -1,9 +1,8 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, missing_required_param
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 
 import 'models_&_providers/model_authentication.dart';
 import 'models_&_providers/model_cart.dart';
@@ -135,18 +134,13 @@ class MyApp extends StatelessWidget {
               ? const ProductsOverviewScreen()
               : FutureBuilder(
                   future: authenticationData.autoLogIn(),
-                  builder: (
-                    context,
-                    builderSnapshot
-                  ) =>
+                  builder: (context, builderSnapshot) =>
                       builderSnapshot.connectionState == ConnectionState.waiting
                           ? SplashScreen()
-                          :   AuthenticationScreen(),
+                          : AuthenticationScreen(),
                 ),
           routes: {
-            AuthenticationScreen.routeName: (ctx) => AuthenticationScreen(),
-            ProductsOverviewScreen.routeName: (ctx) =>
-                const ProductsOverviewScreen(),
+            ProductsOverviewScreen.routeName: (ctx) => const ProductsOverviewScreen(),
             ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),
             CartScreen.routeName: (ctx) => CartScreen(),
             OrdersScreen.routeName: (ctx) => OrdersScreen(),
