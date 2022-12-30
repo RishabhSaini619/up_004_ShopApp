@@ -169,7 +169,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
         curve: Curves.linear,
       ),
     );
-    heightAnimation.addListener(() => setState(() {}));
+    // heightAnimation.addListener(() => setState(() {}));
   }
 
   @override
@@ -222,19 +222,23 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
                     textAlign: TextAlign.center,
                   ),
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(45),
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 0,
+                AnimatedBuilder(
+                  animation: heightAnimation,
+                  builder: (context, animationWidget) => Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(45),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 0,
+                      ),
                     ),
+                    height: heightAnimation.value.height * 0.3,
+                    width: deviceSize.width * 0.8,
+                    padding: const EdgeInsets.all(30),
+                    child: animationWidget,
                   ),
-                  height: heightAnimation.value.height * 0.3,
-                  width: deviceSize.width * 0.8,
-                  padding: const EdgeInsets.all(30),
                   child: Form(
                     key: _formKey,
                     child: SingleChildScrollView(
@@ -467,7 +471,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
                                 .textTheme
                                 .bodyMedium
                                 .copyWith(
-                                  fontSize: 20,
+                                  fontSize: 15,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                           ),
