@@ -160,15 +160,15 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
         milliseconds: 300,
       ),
     );
-    heightAnimation = Tween<Size>(
-      begin: const Size(double.infinity, 850),
-      end: const Size(double.infinity, 1200),
-    ).animate(
-      CurvedAnimation(
-        parent: authenticationAnimationController,
-        curve: Curves.linear,
-      ),
-    );
+    // heightAnimation = Tween<Size>(
+    //   begin: const Size(double.infinity, 850),
+    //   end: const Size(double.infinity, 1200),
+    // ).animate(
+    //   CurvedAnimation(
+    //     parent: authenticationAnimationController,
+    //     curve: Curves.linear,
+    //   ),
+    // );
     // heightAnimation.addListener(() => setState(() {}));
   }
 
@@ -222,23 +222,28 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
                     textAlign: TextAlign.center,
                   ),
                 ),
-                AnimatedBuilder(
-                  animation: heightAnimation,
-                  builder: (context, animationWidget) => Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(45),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 0,
-                      ),
+                AnimatedContainer(
+                  curve: Curves.easeInOutCubicEmphasized,
+                  duration: const Duration(milliseconds: 300),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(45),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 1,
                     ),
-                    height: heightAnimation.value.height * 0.3,
-                    width: deviceSize.width * 0.8,
-                    padding: const EdgeInsets.all(30),
-                    child: animationWidget,
                   ),
+                  width: deviceSize.width * 0.8,
+                  height: _authenticationMode == AuthenticationMode.logIn
+                      ? deviceSize.height * 0.25
+                      : deviceSize.height * 0.4,
+                  // constraints: BoxConstraints(
+                  //   minHeight: _authenticationMode == AuthenticationMode.logIn
+                  //       ? deviceSize.height * 0.2
+                  //       : deviceSize.height * 0.4,
+                  // ),
+                  padding: const EdgeInsets.all(30),
                   child: Form(
                     key: _formKey,
                     child: SingleChildScrollView(
