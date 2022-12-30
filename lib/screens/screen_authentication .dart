@@ -21,66 +21,18 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
     with SingleTickerProviderStateMixin {
   AnimationController authenticationAnimationController;
   Animation<Size> heightAnimation;
-
-  final GlobalKey<FormState> _formKey = GlobalKey();
+  Animation<Offset> slideAnimation;
+  Animation<double> opacityAnimation;
 
   AuthenticationMode _authenticationMode = AuthenticationMode.logIn;
-
   final Map<String, String> _authenticationData = {
     'email': '',
     'password': '',
   };
-
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  final _passwordController = TextEditingController();
   var _isLoading = false;
   var obscureTextData = false;
-  final _passwordController = TextEditingController();
-
-  void _showErrorDialog(String errorMessage) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        alignment: Alignment.center,
-        title: const Text("An error occurred!"),
-        titleTextStyle: Theme.of(context).textTheme.titleLarge,
-        content: Text(errorMessage),
-        contentTextStyle: Theme.of(context).textTheme.bodyMedium,
-        shape: const RoundedRectangleBorder(
-          side: BorderSide(
-            color: Color(0xffff5722),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(30),
-          ),
-        ),
-        actions: [
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  const MaterialStatePropertyAll<Color>(Colors.white),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              'Okay',
-              style: Theme.of(context).textTheme.bodyMedium.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
@@ -150,7 +102,53 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
     }
   }
 
-  @override
+  void _showErrorDialog(String errorMessage) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        alignment: Alignment.center,
+        title: const Text("An error occurred!"),
+        titleTextStyle: Theme.of(context).textTheme.titleLarge,
+        content: Text(errorMessage),
+        contentTextStyle: Theme.of(context).textTheme.bodyMedium,
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(
+            color: Color(0xffff5722),
+            width: 1,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  const MaterialStatePropertyAll<Color>(Colors.white),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Okay',
+              style: Theme.of(context).textTheme.bodyMedium.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -170,6 +168,26 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
     //   ),
     // );
     // heightAnimation.addListener(() => setState(() {}));
+    opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+      CurvedAnimation(
+        parent: authenticationAnimationController,
+        curve: Curves.easeInOutCubicEmphasized,
+      ),
+    );
+    opacityAnimation.addListener(() => setState(() {}));
+    slideAnimation =Tween<Offset>(
+      begin:const Offset(0,-1.5),
+      end: const Offset(0, 00),
+    ).animate(
+      CurvedAnimation(
+        parent: authenticationAnimationController,
+        curve: Curves.easeOutCubic,
+      ),
+    );
+    slideAnimation.addListener(() => setState(() {}));
   }
 
   @override
@@ -223,7 +241,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
                   ),
                 ),
                 AnimatedContainer(
-                  curve: Curves.easeInOutCubicEmphasized,
+                  curve: Curves.easeOutCubic,
                   duration: const Duration(milliseconds: 300),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -294,7 +312,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
                                 ),
                               ),
                               icon: Icon(
-                                Icons.vpn_key,
+                                Icons.key_sharp,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                               suffixIcon: IconButton(
@@ -338,64 +356,75 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
                           ),
                           if (_authenticationMode == AuthenticationMode.signUp)
                             const Divider(),
-                          if (_authenticationMode == AuthenticationMode.signUp)
-                            TextFormField(
-                              enabled: _authenticationMode ==
-                                  AuthenticationMode.signUp,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                                icon: Icon(
-                                  Icons.vpn_key,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(
-                                      () {
-                                        obscureTextData = !obscureTextData;
-                                      },
-                                    );
-                                  },
-                                  icon: Icon(
-                                    obscureTextData
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                                labelText: "Confirm Password",
-                                labelStyle:
-                                    Theme.of(context).textTheme.bodyLarge,
-                                hintText: "Enter Confirm Password",
-                                hintStyle:
-                                    Theme.of(context).textTheme.bodyMedium,
-                                errorStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    .copyWith(
-                                      color: Colors.white,
+                          // if (_authenticationMode == AuthenticationMode.signUp)
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeOutCubic,
+                            child: FadeTransition(
+                              opacity: opacityAnimation,
+                              child: SlideTransition(
+                                position: slideAnimation,
+                                child: TextFormField(
+                                  enabled: _authenticationMode ==
+                                      AuthenticationMode.signUp,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: BorderSide(
+                                        color:
+                                            Theme.of(context).colorScheme.primary,
+                                      ),
                                     ),
+                                    icon: Icon(
+                                      Icons.vpn_key_sharp,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(
+                                          () {
+                                            obscureTextData = !obscureTextData;
+                                          },
+                                        );
+                                      },
+                                      icon: Icon(
+                                        obscureTextData
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color:
+                                            Theme.of(context).colorScheme.primary,
+                                      ),
+                                    ),
+                                    labelText: "Confirm Password",
+                                    labelStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    hintText: "Enter Confirm Password",
+                                    hintStyle:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                    errorStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        .copyWith(
+                                          color: Colors.white,
+                                        ),
+                                  ),
+                                  obscureText: obscureTextData,
+                                  textInputAction: TextInputAction.done,
+                                  // controller: _passwordController,
+                                  validator: _authenticationMode ==
+                                          AuthenticationMode.signUp
+                                      ? (cpass) {
+                                          if (cpass != _passwordController.text) {
+                                            return 'Passwords do not match!';
+                                          }
+                                          return null;
+                                        }
+                                      : null,
+                                ),
                               ),
-                              obscureText: obscureTextData,
-                              textInputAction: TextInputAction.done,
-                              // controller: _passwordController,
-                              validator: _authenticationMode ==
-                                      AuthenticationMode.signUp
-                                  ? (cpass) {
-                                      if (cpass != _passwordController.text) {
-                                        return 'Passwords do not match!';
-                                      }
-                                      return null;
-                                    }
-                                  : null,
                             ),
+                          ),
                         ],
                       ),
                     ),
