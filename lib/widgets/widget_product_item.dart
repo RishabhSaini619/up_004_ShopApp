@@ -127,13 +127,16 @@ class ProductItemWidget extends StatelessWidget {
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: FadeInImage(
-              placeholder:
-                  AssetImage('assets/images/images_product_placeholder.png'),
-              image: NetworkImage(
-                product.productImageURL,
+            child: Hero(
+             tag: product.productId,
+              child: FadeInImage(
+                placeholder:
+                   const AssetImage('assets/images/images_product_placeholder.png'),
+                image: NetworkImage(
+                  product.productImageURL,
+                ),
+                fit: BoxFit.contain,
               ),
-              fit: BoxFit.contain,
             ),
           ),
         ),
