@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:up_004_shopapp/helpers/helper_custom_routes.dart';
 
 import 'models_&_providers/model_authentication.dart';
 import 'models_&_providers/model_cart.dart';
@@ -32,8 +33,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    print(ConnectionState);
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -130,6 +129,11 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               systemOverlayStyle: SystemUiOverlayStyle.light,
+            ),
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CustomPageTransitionsBuilder(),
+              }
             ),
           ),
           home: authenticationData.isAuthenticated
