@@ -9,7 +9,6 @@ import '../models_&_providers/model_product.dart';
 
 import '../screens/screen_product_detail.dart';
 
-
 class ProductItemWidget extends StatelessWidget {
   const ProductItemWidget({Key key}) : super(key: key);
 
@@ -26,7 +25,8 @@ class ProductItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
-    final authenticationData = Provider.of<Authentication>(context, listen: false);
+    final authenticationData =
+        Provider.of<Authentication>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(30),
@@ -50,9 +50,8 @@ class ProductItemWidget extends StatelessWidget {
               ),
               onPressed: () {
                 product.toggleFavoriteStatus(
-                  authenticationData.authenticationToken,
-                  authenticationData.getAuthenticationUserId
-                );
+                    authenticationData.authenticationToken,
+                    authenticationData.getAuthenticationUserId);
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -128,8 +127,12 @@ class ProductItemWidget extends StatelessWidget {
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              product.productImageURL,
+            child: FadeInImage(
+              placeholder:
+                  AssetImage('assets/images/images_product_placeholder.png'),
+              image: NetworkImage(
+                product.productImageURL,
+              ),
               fit: BoxFit.contain,
             ),
           ),
