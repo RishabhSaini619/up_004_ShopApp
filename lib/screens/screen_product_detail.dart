@@ -24,7 +24,6 @@ class ProductDetailScreen extends StatelessWidget {
     ).findById(productID);
     Widget containerWidget(Widget containerWidget, double borderWidth) {
       return Container(
-
         width: double.infinity,
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(15),
@@ -40,6 +39,7 @@ class ProductDetailScreen extends StatelessWidget {
         child: containerWidget,
       );
     }
+
     Widget containerChildWidget(String containerText, String containerSubText) {
       return containerWidget(
         Column(
@@ -68,18 +68,39 @@ class ProductDetailScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(loadedProduct.productTitle),
-        titleTextStyle: Theme.of(context).textTheme.titleLarge,
-      ),
-      body: SingleChildScrollView(
-        child: containerWidget(
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                height: 400,
+      // appBar: AppBar(
+      //   title: Text(loadedProduct.productTitle),
+      //   titleTextStyle: Theme.of(context).textTheme.titleLarge,
+      // ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 400,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: true,
+              title: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.white60,
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 0.5,
+                  ),
+                ),
+                child: Text(
+                  loadedProduct.productTitle,
+                  style: Theme.of(context).textTheme.titleLarge.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                ),
+              ),
+              background: Container(
+                height: 450,
                 width: double.infinity,
                 margin: const EdgeInsets.all(5),
                 padding: const EdgeInsets.all(5),
@@ -87,11 +108,11 @@ class ProductDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(45),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.primary,
-                    width: 2,
-                  ),
+                  borderRadius: BorderRadius.circular(30),
+                  // border: Border.all(
+                  //   color: Theme.of(context).colorScheme.primary,
+                  //   width: 1,
+                  // ),
                 ),
                 child: Hero(
                   tag: loadedProduct.productId,
@@ -101,16 +122,110 @@ class ProductDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              containerChildWidget('Price ', '₹ ${loadedProduct.productPrice}'),
-              const SizedBox(height: 10),
-              containerChildWidget(
-                  'Description ', loadedProduct.productDescription),
-            ],
+            ),
           ),
-          1,
-        ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                containerChildWidget(
+                    'Price ', '₹ ${loadedProduct.productPrice}'),
+                const SizedBox(height: 10),
+                containerChildWidget(
+                    'Description ', loadedProduct.productDescription),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+//{
+// body: CustomScrollView(
+//         slivers: [
+//           SliverAppBar(
+//             expandedHeight: 400,
+//             flexibleSpace: Container(
+//               height: 450,
+//               width: double.infinity,
+//               margin: const EdgeInsets.all(5),
+//               padding: const EdgeInsets.all(5),
+//               alignment: Alignment.center,
+//               decoration: BoxDecoration(
+//                 color: Colors.white,
+//                 shape: BoxShape.rectangle,
+//                 borderRadius: BorderRadius.circular(30),
+//                 // border: Border.all(
+//                 //   color: Theme.of(context).colorScheme.primary,
+//                 //   width: 1,
+//                 // ),
+//               ),
+//               child: Hero(
+//                 tag: loadedProduct.productId,
+//                 child: Image.network(
+//                   loadedProduct.productImageURL,
+//                   fit: BoxFit.contain,
+//                 ),
+//               ),
+//             ),
+//             // centerTitle: true,
+//             title: Text(loadedProduct.productTitle),
+//             titleTextStyle: Theme.of(context).textTheme.titleLarge.copyWith(
+//                   color: Theme.of(context).colorScheme.secondary,
+//                 ),
+//           ),
+//           SliverList(
+//             delegate: SliverChildListDelegate(
+//               [
+//                 containerChildWidget(
+//                     'Price ', '₹ ${loadedProduct.productPrice}'),
+//                 const SizedBox(height: 10),
+//                 containerChildWidget(
+//                     'Description ', loadedProduct.productDescription),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//       }
+
+//{body: SingleChildScrollView(
+//         child: containerWidget(
+//           Column(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//               Container(
+//                 height: 400,
+//                 width: double.infinity,
+//                 margin: const EdgeInsets.all(5),
+//                 padding: const EdgeInsets.all(5),
+//                 alignment: Alignment.center,
+//                 decoration: BoxDecoration(
+//                   color: Colors.white,
+//                   shape: BoxShape.rectangle,
+//                   borderRadius: BorderRadius.circular(45),
+//                   border: Border.all(
+//                     color: Theme.of(context).colorScheme.primary,
+//                     width: 2,
+//                   ),
+//                 ),
+//                 child: Hero(
+//                   tag: loadedProduct.productId,
+//                   child: Image.network(
+//                     loadedProduct.productImageURL,
+//                     fit: BoxFit.contain,
+//                   ),
+//                 ),
+//               ),
+//               const SizedBox(height: 10),
+//               containerChildWidget('Price ', '₹ ${loadedProduct.productPrice}'),
+//               const SizedBox(height: 10),
+//               containerChildWidget(
+//                   'Description ', loadedProduct.productDescription),
+//             ],
+//           ),
+//           1,
+//         ),
+//       ),}
