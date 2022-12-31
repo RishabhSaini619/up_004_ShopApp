@@ -21,7 +21,10 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
   var expandedOrderItem = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(5),
       alignment: Alignment.center,
@@ -33,85 +36,94 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
           width: 1,
         ),
       ),
-      child: Card(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-            side: BorderSide(
-              width: 2,
-              color: Theme.of(context).colorScheme.primary,
-            )),
-        margin: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            ListTile(
-              title: Row(
-                children: [
-                  Text(
-                    'Order Amount :-  ',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  Text(
-                    '₹ ${widget.orderItemWidgetOrders.orderItemAmount}',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ],
-              ),
-              subtitle: Row(
-                children: [
-                  Text(
-                    "Order Date :-  ",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  Text(
-                    DateFormat("dd/mm/yyyy hh:mm ")
-                        .format(widget.orderItemWidgetOrders.orderItemDate),
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
-              trailing: IconButton(
-                icon: Icon(
-                  expandedOrderItem
-                      ? Icons.expand_less_rounded
-                      : Icons.expand_more,
+      child: AnimatedContainer(
+
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOutCubic,
+        child: Card(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+              side: BorderSide(
+                width: 2,
+                color: Theme.of(context).colorScheme.primary,
+              ),),
+          margin: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              ListTile(
+                title: Row(
+                  children: [
+                    Text(
+                      'Order Amount :-  ',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const Spacer(),
+                    Text(
+                      '₹ ${widget.orderItemWidgetOrders.orderItemAmount}',
+                      style: Theme.of(context).textTheme.bodyLarge.copyWith(
+                        fontSize: 18
+                      ),
+                    ),
+                  ],
                 ),
-                onPressed: () {
-                  setState(() {
-                    expandedOrderItem = !expandedOrderItem;
-                  });
-                },
-              ),
-            ),
-            if (expandedOrderItem)
-              Container(
-                height: min(
-                  widget.orderItemWidgetOrders.orderItemProducts.length * 20.0 +
-                      15,
-                  150,
+                subtitle: Row(
+                  children: [
+                    Text(
+                      "Order Date :-  ",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Text(
+                      DateFormat("dd/mm/yyyy hh:mm ")
+                          .format(widget.orderItemWidgetOrders.orderItemDate),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
                 ),
-                padding: const EdgeInsets.all(5),
-                margin: const EdgeInsets.all(10),
-                child: ListView(
-                  children: widget.orderItemWidgetOrders.orderItemProducts
-                      .map(
-                        (products) => Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              products.cartItemTitle,
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                            Text(
-                              " ${products.cartItemQuantity} x ₹ ${products.cartItemPrice}",
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                          ],
-                        ),
-                      )
-                      .toList(),
+                trailing: IconButton(
+                  icon: Icon(
+                    expandedOrderItem
+                        ? Icons.expand_less_rounded
+                        : Icons.expand_more,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      expandedOrderItem = !expandedOrderItem;
+                    });
+                  },
                 ),
               ),
-          ],
+                AnimatedContainer(
+                  duration : const Duration(milliseconds: 500),
+                  curve: Curves.easeInCubic,
+                  height: expandedOrderItem? min(
+                    widget.orderItemWidgetOrders.orderItemProducts.length * 20.0 +
+                        15,
+                    150,
+                  ): 0.0,
+                  padding: const EdgeInsets.all(5),
+                  margin: const EdgeInsets.all(10),
+                  child: ListView(
+                    children: widget.orderItemWidgetOrders.orderItemProducts
+                        .map(
+                          (products) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                products.cartItemTitle,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              Text(
+                                " ${products.cartItemQuantity} x ₹ ${products.cartItemPrice}",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
